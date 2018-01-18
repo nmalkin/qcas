@@ -2,7 +2,6 @@ var CODEBOOK_SHEET = 'laws_codebook';
 var CODEBOOK_HEADER = 'Code';
 var CODING_COLUMN = 2;
 
-
 /**
  * Return specified sheet
  */
@@ -67,23 +66,7 @@ function getCodebook() {
   return getColumnByName(getSheet(CODEBOOK_SHEET), CODEBOOK_HEADER);
 }
 
-function showCodebook() {
-  var html = HtmlService.createTemplateFromFile('sidebar')
-    .evaluate()
-    .setTitle('Coding Helper');
-  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-    .showSidebar(html);
-}
-
-function onOpen() {
-  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
-    .createMenu('Coding Helper')
-    .addItem('Show codebook', 'showCodebook')
-    .addItem('Find conflicts', 'findConflicts')
-    .addToUi();
-}
-
-function onEdit(e) {
+function replaceShortcutCodes(e) {
   Logger.log('edit received');
 
   // Check that we're dealing with only 1 cell
@@ -126,4 +109,24 @@ function onEdit(e) {
 
   var newValue = codes.join(',');
   range.setValue(newValue);
+}
+
+function onEdit(e) {
+  replaceShortcutCodes(e);
+}
+
+function showCodebook() {
+  var html = HtmlService.createTemplateFromFile('sidebar')
+    .evaluate()
+    .setTitle('Coding Helper');
+  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
+    .showSidebar(html);
+}
+
+function onOpen() {
+  SpreadsheetApp.getUi() // Or DocumentApp or FormApp.
+    .createMenu('Coding Helper')
+    .addItem('Show codebook', 'showCodebook')
+    .addItem('Find conflicts', 'findConflicts')
+    .addToUi();
 }
