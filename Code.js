@@ -1,11 +1,7 @@
 var CODEBOOK_SHEET = 'laws_codebook';
 var CODEBOOK_HEADER = 'Code';
-var CODING_SHEET = 'laws_codes';
 var CODING_COLUMN = 2;
 
-function TEST() {
-  Logger.log(getCodebook());
-}
 
 /**
  * Return specified sheet
@@ -69,37 +65,6 @@ function getColumnByName(sheet, name) {
  */
 function getCodebook() {
   return getColumnByName(getSheet(CODEBOOK_SHEET), CODEBOOK_HEADER);
-}
-
-function splitOnSemicolons(data) {
-  var newData = [];
-  data.forEach(function(item) {
-    newData = newData.concat(item.split(';'));
-  });
-  return newData;
-}
-
-function filterEmpty(array) {
-  return array.filter(function(value) {
-    return value != '';
-  });
-}
-
-Array.prototype.unique = function() {
-  var arr = [];
-  for (var i = 0; i < this.length; i++) {
-    if (arr.indexOf(this[i]) == -1) {
-      arr.push(this[i]);
-    }
-  }
-  return arr;
-};
-
-function getData() {
-  var data = splitOnSemicolons(filterEmpty(getColumn(1)))
-    .sort()
-    .unique();
-  return data;
 }
 
 function showCodebook() {
