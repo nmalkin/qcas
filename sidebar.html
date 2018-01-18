@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+</head>
+
+<body>
+  <? var codes = getCodebook(); ?>
+    <table>
+      <? for (var i = 0; i < codes.length; i++) { ?>
+        <tr>
+          <td>
+            <?= codes[i] ?>
+          </td>
+        </tr>
+        <? } ?>
+    </table>
+</body>
+
+</html>
