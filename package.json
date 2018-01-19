@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "description": "",
   "main": "Code.js",
-  "dependencies": {
-    "eslint": "^4.15.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "eslint-config-google": "^0.9.1"
+    "eslint": "^4.15.0",
+    "eslint-config-prettier": "^2.9.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
