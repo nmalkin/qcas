@@ -1,4 +1,5 @@
 var CODEBOOK_SHEET = 'laws_codebook';
+var CODE_SHEET = 'laws_codes';
 var CODEBOOK_HEADER = 'Code';
 var CODING_COLUMN = 2;
 
@@ -67,8 +68,6 @@ function getCodebook() {
 }
 
 function replaceShortcutCodes(e) {
-  Logger.log('edit received');
-
   // Check that we're dealing with only 1 cell
   var range = e.range;
   if (range.getWidth() > 1 || range.getHeight() > 1) {
@@ -293,7 +292,12 @@ function findConflicts() {
 }
 
 function onEdit(e) {
-  replaceShortcutCodes(e);
+  Logger.log('edit received');
+
+  var sheetName = e.range.getSheet().getName();
+  if (sheetName == CODE_SHEET) {
+    replaceShortcutCodes(e);
+  }
 }
 
 function showCodebook() {
