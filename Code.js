@@ -284,32 +284,44 @@ if (!Array.prototype.includes) {
   });
 }
 
+/**
+ * Look for conflicts between codes in two columns.
+ * Write the union of the codes into a new column.
+ * If there's disagreement, flag it (in a new column).
+ */
 function findConflicts() {
+  // Check that we can actually compute conflicts for this range.
   var currentSelection = SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
   if (!validRangeForConflicts(currentSelection)) {
     showConflictInstructions();
     return;
   }
 
+  // Insert new columns (after the selected ones) to hold conflict information.
   var newColumnIndex = insertConflictColumns(currentSelection);
 
+  // Get handles to the columns with the codes to be resolved
   var currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var leftColumn = currentSelection.getColumn();
   var rightColumn = currentSelection.getLastColumn();
 
   var currentRow = 2;
+  // For each code:
   while (currentRow < currentSheet.getLastRow()) {
     var leftCell = currentSheet.getRange(currentRow, leftColumn).getValue();
     var rightCell = currentSheet.getRange(currentRow, rightColumn).getValue();
     // TODO: the profiler says the getValue call is expensive. Replace it with
     // getValues outside the loop.
 
+    // Get the codes
     var leftValues = leftCell.split(',');
     var rightValues = rightCell.split(',');
 
+    // We'll output the union of the codes
     var union = findUnion(leftValues, rightValues);
     var finalValue = union.join(',');
 
+    // And flag a conflict if there are any differences
     var difference = findDifference(leftValues, rightValues);
     var status;
     if (difference.length == 0) {
@@ -318,6 +330,7 @@ function findConflicts() {
       status = 'conflict';
     }
 
+    // Write the results
     var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
     outputRange.setValues([[finalValue, status]]);
 
