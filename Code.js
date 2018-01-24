@@ -90,14 +90,19 @@ function getColumnByName(sheet, name) {
  * Return an array of all codes in the codebook
  *
  * @param question the name of the question, used in the sheet title
+ * @param {boolean} flagsOnly if true, only return the flags
  */
-function getCodebook(question) {
+function getCodebook(question, flagsOnly) {
   var codebookSheetName = question + '_codebook';
   var sheet = getSheet(codebookSheetName);
   var codes = getColumnByName(sheet, CODEBOOK_HEADER_CODES);
   var flags = getColumnByName(sheet, CODEBOOK_HEADER_FLAGS);
-  var allCodes = codes.concat(flags);
-  return allCodes;
+
+  if (flagsOnly) {
+    return flags;
+  } else {
+    return codes.concat(flags);
+  }
 }
 
 /**
@@ -321,8 +326,19 @@ function findConflicts() {
     var union = findUnion(leftValues, rightValues);
     var finalValue = union.join(',');
 
-    // And flag a conflict if there are any differences
+    // Look for any differences between the codes
     var difference = findDifference(leftValues, rightValues);
+
+    // But if the differences are only in flags ("disagreeable" codes), ignore them
+    var flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
+    for (var i = 0; i < difference.length; i++) {
+      var currentDifference = difference[i];
+      if (flags.includes(currentDifference)) {
+        difference.splice(i, 1);
+      }
+    }
+
+    // Check if any (real) differences remain
     var status;
     if (difference.length == 0) {
       status = 'agree';
