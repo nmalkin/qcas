@@ -1,13 +1,23 @@
-var CODEBOOK_SHEET = 'laws_codebook';
-var CODE_SHEET = 'laws_codes';
-var CODEBOOK_HEADER = 'Code';
+var CODEBOOK_HEADER_CODES = 'Codes';
+var CODEBOOK_HEADER_FLAGS = 'Flags';
+var CODEBOOK_PATTERN = /(\w+)_codebook/;
 var CODING_COLUMN = 2;
+var CODING_PATTERN = /(\w+)_codes(_\w+)?/;
+
+function alert(message) {
+  var ui = SpreadsheetApp.getUi();
+  ui.alert(message, ui.ButtonSet.OK);
+}
 
 /**
  * Return specified sheet
  */
 function getSheet(sheetName) {
-  return SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  if (sheet == null) {
+    alert("Couldn't find a sheet with the name " + sheetName);
+  }
+  return sheet;
 }
 
 /**
@@ -15,6 +25,21 @@ function getSheet(sheetName) {
  */
 function getSheetHeader(sheet) {
   return sheet.getRange(1, 1, 1, sheet.getLastColumn());
+}
+
+/**
+ * Return the given array with trailing empty values removed
+ */
+function truncateEmptyArray(arr) {
+  var next = arr.pop();
+  while (next == '') {
+    next = arr.pop();
+  }
+
+  // Put the last (non-empty) value back
+  arr.push(next);
+
+  return arr;
 }
 
 /**
@@ -30,7 +55,7 @@ function getAllValues(range) {
     }
   }
 
-  return data;
+  return truncateEmptyArray(data);
 }
 
 /**
@@ -53,7 +78,8 @@ function getColumnNumberByName(sheet, name) {
 function getColumnByName(sheet, name) {
   var columnNumber = getColumnNumberByName(sheet, name);
   if (columnNumber === -1) {
-    alert('Invalid column name');
+    Logger.log('Invalid column name');
+    return [];
   }
 
   var range = sheet.getRange(2, columnNumber, sheet.getLastRow() - 1, 1);
@@ -62,12 +88,25 @@ function getColumnByName(sheet, name) {
 
 /**
  * Return an array of all codes in the codebook
+ *
+ * @param question the name of the question, used in the sheet title
  */
-function getCodebook() {
-  return getColumnByName(getSheet(CODEBOOK_SHEET), CODEBOOK_HEADER);
+function getCodebook(question) {
+  var codebookSheetName = question + '_codebook';
+  var sheet = getSheet(codebookSheetName);
+  var codes = getColumnByName(sheet, CODEBOOK_HEADER_CODES);
+  var flags = getColumnByName(sheet, CODEBOOK_HEADER_FLAGS);
+  var allCodes = codes.concat(flags);
+  return allCodes;
 }
 
-function replaceShortcutCodes(e) {
+/**
+ * Replace shortcuts with full codes for the given change event
+ *
+ * @param {string} question
+ * @param {event} e
+ */
+function replaceShortcutCodes(question, e) {
   // Check that we're dealing with only 1 cell
   var range = e.range;
   if (range.getWidth() > 1 || range.getHeight() > 1) {
@@ -91,7 +130,7 @@ function replaceShortcutCodes(e) {
 
   Logger.log('looking up values');
 
-  var codebook = getCodebook();
+  var codebook = getCodebook(question);
   var values = value.split(' ');
   var codes = values.map(function(value) {
     var index = parseInt(value) - 1;
@@ -121,8 +160,7 @@ function showConflictInstructions() {
   var message =
     'To start conflict resolution, please select ' +
     'the two columns that contain the codes to be resolved.';
-  var ui = SpreadsheetApp.getUi();
-  ui.alert(message, ui.ButtonSet.OK);
+  alert(message);
 }
 
 /**
@@ -291,12 +329,33 @@ function findConflicts() {
   }
 }
 
+/**
+ * Determine whether the sheet is used for coding
+ * and so whether we should perform substitution on it
+ *
+ * @param {*Sheet} sheet
+ * @return the name of the question being coded, or null if there is none
+ */
+function isCodeSheet(sheet) {
+  var sheetName = sheet.getName();
+  var match = CODING_PATTERN.exec(sheetName);
+  if (match) {
+    return match[1];
+  } else {
+    return null;
+  }
+}
+
+/**
+ * Called when some cell in the spreadsheet has been changed
+ */
 function onEdit(e) {
   Logger.log('edit received');
 
-  var sheetName = e.range.getSheet().getName();
-  if (sheetName == CODE_SHEET) {
-    replaceShortcutCodes(e);
+  var sheet = e.range.getSheet();
+  var code = isCodeSheet(sheet);
+  if (code) {
+    replaceShortcutCodes(code, e);
   }
 }
 
@@ -305,6 +364,27 @@ function showCodebook() {
     .evaluate()
     .setTitle('Coding Helper');
   SpreadsheetApp.getUi().showSidebar(html);
+}
+
+/**
+ * Get the question ID for the currently selected question
+ */
+function getCurrentQuestionCode() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  // Is the current sheet a coding sheet?
+  var question = isCodeSheet(sheet);
+  if (question !== null) {
+    return question;
+  }
+
+  // Else, is the current sheet a codebook sheet?
+  var match = CODEBOOK_PATTERN.exec(sheet.getName());
+  if (match) {
+    return match[1];
+  }
+
+  // Otherwise, I really have no idea what sheet this is.
+  return null;
 }
 
 function onOpen() {

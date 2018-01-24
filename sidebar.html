@@ -7,10 +7,14 @@
 </head>
 
 <body>
-  <? var codes = getCodebook(); ?>
+  <? var question = getCurrentQuestionCode(); ?>
+  <? var codes = getCodebook(question); ?>
     <table>
       <? for (var i = 0; i < codes.length; i++) { ?>
         <tr>
+          <td>
+            <?= i ?>
+          </td>
           <td>
             <?= codes[i] ?>
           </td>
