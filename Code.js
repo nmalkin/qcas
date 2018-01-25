@@ -319,7 +319,7 @@ function findConflicts() {
 
   var currentRow = 2;
   // For each code:
-  while (currentRow < currentSheet.getLastRow()) {
+  while (currentRow <= currentSheet.getLastRow()) {
     var leftCell = currentSheet.getRange(currentRow, leftColumn).getValue();
     var rightCell = currentSheet.getRange(currentRow, rightColumn).getValue();
     // TODO: the profiler says the getValue call is expensive. Replace it with
