@@ -190,46 +190,61 @@ function insertConflictColumns(range) {
 }
 
 /**
- * Compute the union of two arrays
+ * Return object with commonalities & differences of the two arrays
+ *
+ * @param flags ignore any differences in flags
  */
-function findUnion(a, b) {
-  var c = a.slice();
+function computeDiff(a, b, flags) {
+  var both = [],
+    onlyA = [],
+    onlyB = [];
 
-  for (var i = 0; i < b.length; i++) {
-    var el = b[i];
-    if (!c.includes(el)) {
-      c.push(el);
+  // Check whether each value in A is in B
+  for (var i = 0; i < a.length; i++) {
+    var el = a[i];
+    if (b.includes(el)) {
+      both.push(el);
+    } else if (flags.includes(el)) {
+      both.push(el);
+    } else {
+      onlyA.push(el);
     }
   }
 
-  return c;
+  // Now check whether each value in B is in A
+  for (var i = 0; i < b.length; i++) {
+    var el = b[i];
+    if (a.includes(el)) {
+      // Don't need to add to "both" because first loop already covered it
+    } else if (flags.includes(el)) {
+      both.push(el);
+    } else {
+      onlyB.push(el);
+    }
+  }
+
+  return {
+    both: both,
+    onlyA: onlyA,
+    onlyB: onlyB
+  };
 }
 
 /**
- * Return the elements not in both arrays
+ * Given a diff object (@see computeDiff) return string representation of it
  */
-function findDifference(a, b) {
-  var diff = [];
-
-  // Loop over both array, checking that each value isn't contained in the
-  // other one.
-  // This implementation is suboptimal, but is used for API compatibility and
-  // simplicity.
-  for (var i = 0; i < a.length; i++) {
-    var el = a[i];
-    if (!b.includes(el)) {
-      diff.push(el);
-    }
+function formatDiff(diff) {
+  var str = '';
+  if (diff.both.length > 0) {
+    str += diff.both.join(',');
   }
-
-  for (var i = 0; i < b.length; i++) {
-    var el = b[i];
-    if (!a.includes(el)) {
-      diff.push(el);
-    }
+  if (diff.onlyA.length > 0) {
+    str += '\n<' + diff.onlyA.join(',');
   }
-
-  return diff;
+  if (diff.onlyB.length > 0) {
+    str += '\n>' + diff.onlyB.join(',');
+  }
+  return str;
 }
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
@@ -322,24 +337,14 @@ function findConflicts() {
     var leftValues = leftCell.split(',');
     var rightValues = rightCell.split(',');
 
-    // We'll output the union of the codes
-    var union = findUnion(leftValues, rightValues);
-    var finalValue = union.join(',');
-
-    // Look for any differences between the codes
-    var difference = findDifference(leftValues, rightValues);
-
-    // But if the differences are only in flags ("disagreeable" codes), ignore them
+    // Find commonalities and differences
     var flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
-    for (var i = 0; i < difference.length; i++) {
-      var currentDifference = difference[i];
-      if (flags.includes(currentDifference)) {
-        difference.splice(i, 1);
-      }
-    }
+    var diff = computeDiff(leftValues, rightValues, flags);
+    var diffStr = formatDiff(diff);
 
     // Check if any (real) differences remain
     var status;
+    var difference = diff.onlyA.concat(diff.onlyB);
     if (difference.length == 0) {
       status = 'agree';
     } else {
@@ -348,7 +353,7 @@ function findConflicts() {
 
     // Write the results
     var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
-    outputRange.setValues([[finalValue, status]]);
+    outputRange.setValues([[diffStr, status]]);
 
     if (status == 'conflict') {
       outputRange.setBackground('yellow');
