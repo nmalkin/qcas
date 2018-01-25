@@ -1,7 +1,6 @@
 var CODEBOOK_HEADER_CODES = 'Codes';
 var CODEBOOK_HEADER_FLAGS = 'Flags';
 var CODEBOOK_PATTERN = /(\w+)_codebook/;
-var CODING_COLUMN = 2;
 var CODING_PATTERN = /(\w+)_codes(_\w+)?/;
 
 function alert(message) {
@@ -115,13 +114,6 @@ function replaceShortcutCodes(question, e) {
   // Check that we're dealing with only 1 cell
   var range = e.range;
   if (range.getWidth() > 1 || range.getHeight() > 1) {
-    return;
-  }
-
-  // Check that the modification is in the right column
-  var column = range.getColumn();
-  if (column != CODING_COLUMN) {
-    // TODO: also check that it's the right sheet
     return;
   }
 
@@ -396,7 +388,7 @@ function onEdit(e) {
 function showCodebook() {
   var html = HtmlService.createTemplateFromFile('sidebar')
     .evaluate()
-    .setTitle('Coding Helper');
+    .setTitle('Coding Assistant');
   SpreadsheetApp.getUi().showSidebar(html);
 }
 
