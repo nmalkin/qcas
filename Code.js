@@ -415,7 +415,7 @@ function getCurrentQuestionCode() {
 
 function onOpen() {
   SpreadsheetApp.getUi()
-    .createMenu('Coding Helper')
+    .createMenu('Coding Assistant')
     .addItem('Show codebook', 'showCodebook')
     .addItem('Find conflicts', 'findConflicts')
     .addToUi();
