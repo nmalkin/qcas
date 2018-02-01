@@ -361,9 +361,9 @@ function findConflicts() {
  */
 function updateConflictColors(e) {
   var currentColor = e.range.getBackground();
+  // Only handle cells that were marked as conflicted (using yellow color)
   if (currentColor == '#ffff00') {
-    // yellow
-    if (e.value.indexOf('< ') === -1 && e.value.indexOf('> ') === -1) {
+    if (e.value.indexOf('<') === -1 && e.value.indexOf('>') === -1) {
       // No more conflict!
       e.range.setBackground('white');
     }
