@@ -2,6 +2,7 @@ var CODEBOOK_HEADER_CODES = 'Codes';
 var CODEBOOK_HEADER_FLAGS = 'Flags';
 var CODEBOOK_PATTERN = /(\w+)_codebook/;
 var CODING_PATTERN = /(\w+)_codes(_\w+)?/;
+var FINAL_CODES_PATTERN = /(\w+)_codes_final/;
 
 function alert(message) {
   var ui = SpreadsheetApp.getUi();
@@ -348,10 +349,24 @@ function findConflicts() {
     outputRange.setValues([[diffStr, status]]);
 
     if (status == 'conflict') {
-      outputRange.setBackground('yellow');
+      outputRange.setBackgrounds([['yellow', 'white']]);
     }
 
     currentRow++;
+  }
+}
+
+/**
+ * Clear the color in the given cell if it doesn't have conflicts anymore
+ */
+function updateConflictColors(e) {
+  var currentColor = e.range.getBackground();
+  if (currentColor == '#ffff00') {
+    // yellow
+    if (e.value.indexOf('< ') === -1 && e.value.indexOf('> ') === -1) {
+      // No more conflict!
+      e.range.setBackground('white');
+    }
   }
 }
 
@@ -382,6 +397,10 @@ function onEdit(e) {
   var code = isCodeSheet(sheet);
   if (code) {
     replaceShortcutCodes(code, e);
+  }
+
+  if (FINAL_CODES_PATTERN.exec(sheet.getName())) {
+    updateConflictColors(e);
   }
 }
 
