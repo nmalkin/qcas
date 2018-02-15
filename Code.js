@@ -138,7 +138,7 @@ function replaceShortcutCodes(question, e) {
   // Check that the values we're substiting
   var value = e.value;
   Logger.log('checking value %s', value);
-  var re = /[0-9 ]+/;
+  var re = /^[0-9 ]+$/;
   if (!re.test(value)) {
     return;
   }
