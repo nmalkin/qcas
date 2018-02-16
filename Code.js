@@ -104,21 +104,36 @@ function getColumnByName(sheet, name) {
 }
 
 /**
+ * Return an object with all codes and flags in the codebook
+ *
+ * @param question the name of the question, used in the sheet title
+ * @param {boolean} flagsOnly if true, only return the flags
+ */
+function getCodesAndFlags(question) {
+  var codebookSheetName = question + '_codebook';
+  var sheet = getSheet(codebookSheetName);
+  var codes = getColumnByName(sheet, CODEBOOK_HEADER_CODES);
+  var flags = getColumnByName(sheet, CODEBOOK_HEADER_FLAGS);
+
+  return {
+    codes: codes,
+    flags: flags
+  };
+}
+
+/**
  * Return an array of all codes in the codebook
  *
  * @param question the name of the question, used in the sheet title
  * @param {boolean} flagsOnly if true, only return the flags
  */
 function getCodebook(question, flagsOnly) {
-  var codebookSheetName = question + '_codebook';
-  var sheet = getSheet(codebookSheetName);
-  var codes = getColumnByName(sheet, CODEBOOK_HEADER_CODES);
-  var flags = getColumnByName(sheet, CODEBOOK_HEADER_FLAGS);
+  var codesAndFlags = getCodesAndFlags(question);
 
   if (flagsOnly) {
-    return flags;
+    return codesAndFlags.flags;
   } else {
-    return codes.concat(flags);
+    return codesAndFlags.codes.concat(codesAndFlags.flags);
   }
 }
 
