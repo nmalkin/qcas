@@ -26,7 +26,7 @@ function filterEmpty(array) {
 }
 
 function getCodeList(cell) {
-  return filterEmpty(cell.split(CODES_SEPARATOR));
+  return filterEmpty(cell.split(CODES_SEPARATOR)).unique();
 }
 
 function CONCORDANCE(cellA, cellB, questionId) {
