@@ -81,3 +81,43 @@ function MINCOUNT(cellA, cellB, questionId) {
   var minCount = Math.min(a_i, b_i);
   return minCount;
 }
+
+function computeKupperHafner() {
+  // Check that the selected range is valid
+  var currentSelection = SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
+  // TODO: may need separate validRange function - or just a new name
+  if (!validRangeForConflicts(currentSelection)) {
+    showConflictInstructions();
+    return;
+  }
+
+  // Insert new columns (after the selected ones)
+  var newColumnIndex = insertColumns(currentSelection, 2, ['final', 'status']);
+
+  // Get handles to the columns with the codes
+  var currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var questionId = isCodeSheet(currentSheet);
+  var leftColumn = currentSelection.getColumn();
+  var rightColumn = currentSelection.getLastColumn();
+
+  var currentRow = 2;
+  // For each code:
+  while (currentRow <= currentSheet.getLastRow()) {
+    var leftCell = currentSheet
+      .getRange(currentRow, leftColumn)
+      .getA1Notation();
+    var rightCell = currentSheet
+      .getRange(currentRow, rightColumn)
+      .getA1Notation();
+
+    var concordanceString =
+      '=CONCORDANCE(' + leftCell + ',' + rightCell + ',"' + questionId + '")';
+    var minCountString =
+      '=MINCOUNT(' + leftCell + ',' + rightCell + ',"' + questionId + '")';
+
+    var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
+    outputRange.setValues([[concordanceString, minCountString]]);
+
+    currentRow++;
+  }
+}
