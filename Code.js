@@ -196,22 +196,33 @@ function showConflictInstructions() {
 /**
  * Insert 2 columns after the ones in the specified range
  * @param {Range} range
+ * @param {Integer} howMany how many columns to insert
+ * @param {Array} names the names to put in the first row of the new columns
  * @return {Integer} the index of the first newly created column
  */
-function insertConflictColumns(range) {
+function insertColumns(range, howMany, names) {
   // Figure out where to put the columns
   var position = range.getLastColumn();
 
   // Insert the columns
   var sheet = range.getSheet();
-  sheet.insertColumnsAfter(position, 2);
+  sheet.insertColumnsAfter(position, howMany);
 
   // Give them appropriate titles
   var newColumnIndex = position + 1;
-  var header = sheet.getRange(1, newColumnIndex, 1, 2);
-  header.setValues([['final', 'status']]);
+  var header = sheet.getRange(1, newColumnIndex, 1, howMany);
+  header.setValues([names]);
 
   return newColumnIndex;
+}
+
+/**
+ * Insert conflict columns after the ones in the specified range
+ * @param {Range} range
+ * @return {Integer} the index of the first newly created column
+ */
+function insertConflictColumns(range) {
+  return insertColumns(range, 2, ['final', 'status']);
 }
 
 /**
