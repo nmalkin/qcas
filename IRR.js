@@ -35,6 +35,10 @@ function CONCORDANCE(cellA, cellB, questionId) {
   var a_i = codeListA.length;
   var b_i = codeListB.length;
 
+  if (a_i === 0 && b_i === 0) {
+    return '';
+  }
+
   // Get the flags from the codebook, so we know which entries to ignore
   var codesAndFlags = getCodesAndFlags(questionId);
 
@@ -62,6 +66,10 @@ function MINCOUNT(cellA, cellB, questionId) {
 
   var a_i = codeListA.length;
   var b_i = codeListB.length;
+
+  if (a_i === 0 && b_i === 0) {
+    return '';
+  }
 
   // Don't count flags
   var codesAndFlags = getCodesAndFlags(questionId);
@@ -92,7 +100,7 @@ function computeKupperHafner() {
   }
 
   // Insert new columns (after the selected ones)
-  var newColumnIndex = insertColumns(currentSelection, 2, ['final', 'status']);
+  var newColumnIndex = insertColumns(currentSelection, 2, ['Concodance', 'MinCount']);
 
   // Get handles to the columns with the codes
   var currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
