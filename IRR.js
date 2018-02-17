@@ -55,3 +55,14 @@ function CONCORDANCE(cellA, cellB, questionId) {
   var pi_hat_i = x_i / Math.max(a_i, b_i);
   return pi_hat_i;
 }
+
+function MINCOUNT(cellA, cellB) {
+  var codeListA = getCodeList(cellA);
+  var codeListB = getCodeList(cellB);
+
+  var a_i = codeListA.length;
+  var b_i = codeListB.length;
+
+  var minCount = Math.min(a_i, b_i);
+  return minCount;
+}
