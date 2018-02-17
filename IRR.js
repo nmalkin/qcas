@@ -17,6 +17,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.c
 
 var CODES_SEPARATOR = ',';
 
+var FIRST_ROW = 2;
+
 function filterEmpty(array) {
   return array.filter(function(value) {
     return value != '';
@@ -100,7 +102,10 @@ function computeKupperHafner() {
   }
 
   // Insert new columns (after the selected ones)
-  var newColumnIndex = insertColumns(currentSelection, 2, ['Concodance', 'MinCount']);
+  var newColumnIndex = insertColumns(currentSelection, 2, [
+    'Concodance',
+    'MinCount'
+  ]);
 
   // Get handles to the columns with the codes
   var currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
@@ -108,7 +113,7 @@ function computeKupperHafner() {
   var leftColumn = currentSelection.getColumn();
   var rightColumn = currentSelection.getLastColumn();
 
-  var currentRow = 2;
+  var currentRow = FIRST_ROW;
   // For each code:
   while (currentRow <= currentSheet.getLastRow()) {
     var leftCell = currentSheet
@@ -128,4 +133,36 @@ function computeKupperHafner() {
 
     currentRow++;
   }
+
+  var concordanceColumn = currentSheet
+    .getRange(FIRST_ROW, newColumnIndex, currentRow - FIRST_ROW, 1)
+    .getA1Notation();
+  var piHat =
+    '=SUM(' + concordanceColumn + ')/COUNT(' + concordanceColumn + ')';
+
+  var codebook = getCodesAndFlags(questionId).codes;
+  var minCountColumn = currentSheet
+    .getRange(FIRST_ROW, newColumnIndex + 1, currentRow - FIRST_ROW, 1)
+    .getA1Notation();
+  var pi_0 =
+    '=SUM(' +
+    minCountColumn +
+    ')/(COUNT(' +
+    minCountColumn +
+    ')*' +
+    codebook.length +
+    ')';
+
+  var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 3, 2);
+  var piHatRange = outputRange.getCell(1, 2).getA1Notation();
+  var pi0Range = outputRange.getCell(2, 2).getA1Notation();
+
+  var concordance =
+    '=(' + piHatRange + '-' + pi0Range + ')/(1-' + pi0Range + ')';
+
+  outputRange.setValues([
+    ['pi-hat', piHat],
+    ['pi0', pi_0],
+    ['Kupper-Hafner concordance', concordance]
+  ]);
 }
