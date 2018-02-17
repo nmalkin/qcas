@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.c
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 var CODEBOOK_HEADER_CODES = 'Codes';
@@ -480,5 +480,6 @@ function onOpen() {
     .createMenu('Coding Assistant')
     .addItem('Show codebook', 'showCodebook')
     .addItem('Find conflicts', 'findConflicts')
+    .addItem('Compute Kupper-Hafner agreement', 'computeKupperHafner')
     .addToUi();
 }
