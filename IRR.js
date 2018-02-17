@@ -23,9 +23,13 @@ function filterEmpty(array) {
   });
 }
 
+function getCodeList(cell) {
+  return filterEmpty(cell.split(CODES_SEPARATOR));
+}
+
 function CONCORDANCE(cellA, cellB, questionId) {
-  var codeListA = filterEmpty(cellA.split(CODES_SEPARATOR));
-  var codeListB = filterEmpty(cellB.split(CODES_SEPARATOR));
+  var codeListA = getCodeList(cellA);
+  var codeListB = getCodeList(cellB);
 
   // Let the variables a_i, and b_i, denote the numbers of attributes for the i-th unit chosen by raters A and B, respectively
   var a_i = codeListA.length;
