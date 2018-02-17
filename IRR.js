@@ -56,12 +56,27 @@ function CONCORDANCE(cellA, cellB, questionId) {
   return pi_hat_i;
 }
 
-function MINCOUNT(cellA, cellB) {
+function MINCOUNT(cellA, cellB, questionId) {
   var codeListA = getCodeList(cellA);
   var codeListB = getCodeList(cellB);
 
   var a_i = codeListA.length;
   var b_i = codeListB.length;
+
+  // Don't count flags
+  var codesAndFlags = getCodesAndFlags(questionId);
+  for (var i = 0; i < codeListA.length; i++) {
+    var el = codeListA[i];
+    if (codesAndFlags.flags.includes(el)) {
+      a_i--;
+    }
+  }
+  for (var i = 0; i < codeListB.length; i++) {
+    var el = codeListB[i];
+    if (codesAndFlags.flags.includes(el)) {
+      b_i--;
+    }
+  }
 
   var minCount = Math.min(a_i, b_i);
   return minCount;
