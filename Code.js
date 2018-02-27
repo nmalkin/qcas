@@ -15,11 +15,15 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-var CODEBOOK_HEADER_CODES = 'Codes';
-var CODEBOOK_HEADER_FLAGS = 'Flags';
+var CODEBOOK_HEADER_CODE = 'Code';
+var CODEBOOK_HEADER_TYPE = 'Type';
+var CODEBOOK_TYPE_CODE = 'code';
+var CODEBOOK_TYPE_FLAG = 'flag';
 var CODEBOOK_PATTERN = /(\w+)_codebook/;
 var CODING_PATTERN = /(\w+)_codes(_\w+)?/;
 var FINAL_CODES_PATTERN = /(\w+)_codes_final/;
+
+var FIRST_ROW = 2; // Assuming a header, row 2 is always the first row.
 
 function alert(message) {
   var ui = SpreadsheetApp.getUi();
@@ -90,20 +94,6 @@ function getColumnNumberByName(sheet, name) {
 }
 
 /**
- * Given a sheet and a column name, return that column's values
- */
-function getColumnByName(sheet, name) {
-  var columnNumber = getColumnNumberByName(sheet, name);
-  if (columnNumber === -1) {
-    Logger.log('Invalid column name');
-    return [];
-  }
-
-  var range = sheet.getRange(2, columnNumber, sheet.getLastRow() - 1, 1);
-  return getAllValues(range);
-}
-
-/**
  * Return an object with all codes and flags in the codebook
  *
  * @param question the name of the question, used in the sheet title
@@ -112,8 +102,44 @@ function getColumnByName(sheet, name) {
 function getCodesAndFlags(question) {
   var codebookSheetName = question + '_codebook';
   var sheet = getSheet(codebookSheetName);
-  var codes = getColumnByName(sheet, CODEBOOK_HEADER_CODES);
-  var flags = getColumnByName(sheet, CODEBOOK_HEADER_FLAGS);
+
+  // Find the range where the relevant codebook columns are located
+  var codeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_CODE);
+  var typeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_TYPE);
+  var firstColumn = Math.min(codeColumn, typeColumn);
+  var lastColumn = Math.max(codeColumn, typeColumn);
+  var range = sheet.getRange(
+    FIRST_ROW,
+    firstColumn,
+    sheet.getLastRow() - 1,
+    lastColumn - firstColumn + 1
+  );
+
+  var values = range.getValues();
+  var codes = [],
+    flags = [];
+  for (var i = 0; i < range.getHeight(); i++) {
+    var code = values[i][codeColumn - firstColumn];
+    if (code === '') {
+      // Tolerate holes in codebook
+      continue;
+    }
+
+    var type = values[i][typeColumn - firstColumn];
+    if (type === '') {
+      // If no type is specified, assume it's a code
+      type = CODEBOOK_TYPE_CODE;
+    }
+
+    if (type === CODEBOOK_TYPE_CODE) {
+      codes.push(code);
+    } else if (type === CODEBOOK_TYPE_FLAG) {
+      flags.push(code);
+    } else {
+      alert('Unrecognized code type ' + type + ' in codebook ' + question);
+      break;
+    }
+  }
 
   return {
     codes: codes,
