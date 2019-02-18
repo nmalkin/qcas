@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018 N. Malkin
+Copyright (C) 2019 N. Malkin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -309,6 +309,30 @@ function formatDiff(diff) {
   return str;
 }
 
+function cellDifferences(leftCell, rightCell) {
+  // Get the codes
+  var leftValues = leftCell.split(',');
+  var rightValues = rightCell.split(',');
+
+  // Find commonalities and differences
+  var flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
+  var diff = computeDiff(leftValues, rightValues, flags);
+  return diff;
+}
+
+function CODES_AGREE(cellA, cellB) {
+  // Check if any (real) differences remain
+  var diff = cellDifferences(cellA, cellB);
+  var status;
+  var difference = diff.onlyA.concat(diff.onlyB);
+  if (difference.length == 0) {
+    status = 'agree';
+  } else {
+    status = 'conflict';
+  }
+  return status;
+}
+
 /**
  * Look for conflicts between codes in two columns.
  * Write the union of the codes into a new column.
@@ -333,34 +357,28 @@ function findConflicts() {
   var currentRow = 2;
   // For each code:
   while (currentRow <= currentSheet.getLastRow()) {
-    var leftCell = currentSheet.getRange(currentRow, leftColumn).getValue();
-    var rightCell = currentSheet.getRange(currentRow, rightColumn).getValue();
+    var leftCell = currentSheet.getRange(currentRow, leftColumn);
+    var rightCell = currentSheet.getRange(currentRow, rightColumn);
+
+    var leftCellValue = leftCell.getValue();
+    var rightCellValue = rightCell.getValue();
     // TODO: the profiler says the getValue call is expensive. Replace it with
     // getValues outside the loop.
 
-    // Get the codes
-    var leftValues = leftCell.split(',');
-    var rightValues = rightCell.split(',');
-
-    // Find commonalities and differences
-    var flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
-    var diff = computeDiff(leftValues, rightValues, flags);
+    var diff = cellDifferences(leftCellValue, rightCellValue);
     var diffStr = formatDiff(diff);
-
-    // Check if any (real) differences remain
-    var status;
-    var difference = diff.onlyA.concat(diff.onlyB);
-    if (difference.length == 0) {
-      status = 'agree';
-    } else {
-      status = 'conflict';
-    }
+    var agreementCommand =
+      '=CODES_AGREE(' +
+      leftCell.getA1Notation() +
+      ',' +
+      rightCell.getA1Notation() +
+      ')';
 
     // Write the results
     var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
-    outputRange.setValues([[diffStr, status]]);
+    outputRange.setValues([[diffStr, agreementCommand]]);
 
-    if (status == 'conflict') {
+    if (CODES_AGREE(leftCellValue, rightCellValue) == 'conflict') {
       outputRange.setBackgrounds([['yellow', 'white']]);
     }
 
