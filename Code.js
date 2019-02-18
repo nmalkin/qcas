@@ -25,6 +25,8 @@ var FINAL_CODES_PATTERN = /(\w+)_codes_final/;
 
 var FIRST_ROW = 2; // Assuming a header, row 2 is always the first row.
 
+var CODES_SEPARATOR = ',';
+
 function alert(message) {
   var ui = SpreadsheetApp.getUi();
   ui.alert(message, ui.ButtonSet.OK);
@@ -201,7 +203,7 @@ function replaceShortcutCodes(question, e) {
 
   Logger.log('performing substitution');
 
-  var newValue = codes.join(',');
+  var newValue = codes.join(CODES_SEPARATOR);
   range.setValue(newValue);
 }
 
@@ -298,21 +300,21 @@ function computeDiff(a, b, flags) {
 function formatDiff(diff) {
   var str = '';
   if (diff.both.length > 0) {
-    str += diff.both.join(',');
+    str += diff.both.join(CODES_SEPARATOR);
   }
   if (diff.onlyA.length > 0) {
-    str += '\n<' + diff.onlyA.join(',');
+    str += '\n<' + diff.onlyA.join(CODES_SEPARATOR);
   }
   if (diff.onlyB.length > 0) {
-    str += '\n>' + diff.onlyB.join(',');
+    str += '\n>' + diff.onlyB.join(CODES_SEPARATOR);
   }
   return str;
 }
 
 function cellDifferences(leftCell, rightCell) {
   // Get the codes
-  var leftValues = leftCell.split(',');
-  var rightValues = rightCell.split(',');
+  var leftValues = leftCell.split(CODES_SEPARATOR);
+  var rightValues = rightCell.split(CODES_SEPARATOR);
 
   // Find commonalities and differences
   var flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
