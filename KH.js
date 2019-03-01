@@ -103,7 +103,7 @@ function computeKupperHafner() {
 
   // Insert new columns (after the selected ones)
   var newColumnIndex = insertColumns(currentSelection, 2, [
-    'Concodance',
+    'Concordance',
     'MinCount'
   ]);
 
