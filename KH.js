@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018 N. Malkin
+Copyright (C) 2019 N. Malkin
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
@@ -33,28 +33,40 @@ function CONCORDANCE(cellA, cellB, questionId) {
   var codeListA = getCodeList(cellA);
   var codeListB = getCodeList(cellB);
 
-  // Let the variables a_i, and b_i, denote the numbers of attributes for the i-th unit chosen by raters A and B, respectively
-  var a_i = codeListA.length;
-  var b_i = codeListB.length;
-
-  if (a_i === 0 && b_i === 0) {
+  if (codeListA.length === 0 && codeListB.length === 0) {
     return '';
   }
 
   // Get the flags from the codebook, so we know which entries to ignore
   var codesAndFlags = getCodesAndFlags(questionId);
 
+  // Let the variables a_i, and b_i, denote the numbers of attributes for the i-th unit chosen by raters A and B, respectively
+  var a_i = 0;
+  var b_i = 0;
+  for (var i = 0; i < codeListB.length; i++) {
+    var el = codeListB[i];
+    if (codesAndFlags.codes.includes(el)) {
+      b_i++;
+    }
+  }
+
   // Let the random variable Xi denote the number of elements common to the sets A_i and B_i
   var x_i = 0;
   for (var i = 0; i < codeListA.length; i++) {
     var el = codeListA[i];
     if (codesAndFlags.codes.includes(el)) {
+      a_i++;
+
       if (codeListB.includes(el)) {
         x_i++;
       }
     } else if (!codesAndFlags.flags.includes(el)) {
       throw 'Not recognized as either code or flag: ' + el;
     }
+  }
+
+  if (a_i === 0 && b_i === 0) {
+    return '';
   }
 
   // The observed proportion of concordance is pi_hat_i = x_i / max(a_i, b_i)
