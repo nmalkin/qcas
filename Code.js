@@ -145,7 +145,7 @@ function getCodesAndFlags(question) {
 
   return {
     codes: codes,
-    flags: flags
+    flags: flags,
   };
 }
 
@@ -190,7 +190,7 @@ function replaceShortcutCodes(question, e) {
 
   var codebook = getCodebook(question);
   var values = value.split(' ');
-  var codes = values.map(function(value) {
+  var codes = values.map(function (value) {
     var index = parseInt(value) - 1;
 
     if (index < 0 || index >= codebook.length) {
@@ -290,7 +290,7 @@ function computeDiff(a, b, flags) {
   return {
     both: both,
     onlyA: onlyA,
-    onlyB: onlyB
+    onlyB: onlyB,
   };
 }
 

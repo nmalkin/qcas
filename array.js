@@ -15,7 +15,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-Array.prototype.unique = function() {
+Array.prototype.unique = function () {
   var arr = [];
   for (var i = 0; i < this.length; i++) {
     if (arr.indexOf(this[i]) == -1) {
@@ -28,7 +28,7 @@ Array.prototype.unique = function() {
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
   Object.defineProperty(Array.prototype, 'includes', {
-    value: function(searchElement, fromIndex) {
+    value: function (searchElement, fromIndex) {
       if (this == null) {
         throw new TypeError('"this" is null or not defined');
       }
@@ -78,6 +78,6 @@ if (!Array.prototype.includes) {
 
       // 8. Return false
       return false;
-    }
+    },
   });
 }

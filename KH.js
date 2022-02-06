@@ -20,7 +20,7 @@ var CODES_SEPARATOR = ',';
 var FIRST_ROW = 2;
 
 function filterEmpty(array) {
-  return array.filter(function(value) {
+  return array.filter(function (value) {
     return value != '';
   });
 }
@@ -116,7 +116,7 @@ function computeKupperHafner() {
   // Insert new columns (after the selected ones)
   var newColumnIndex = insertColumns(currentSelection, 2, [
     'Concordance',
-    'MinCount'
+    'MinCount',
   ]);
 
   // Get handles to the columns with the codes
@@ -175,6 +175,6 @@ function computeKupperHafner() {
   outputRange.setValues([
     ['pi-hat', piHat],
     ['pi0', pi_0],
-    ['Kupper-Hafner concordance', concordance]
+    ['Kupper-Hafner concordance', concordance],
   ]);
 }
