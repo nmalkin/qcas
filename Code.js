@@ -99,7 +99,6 @@ function getColumnNumberByName(sheet, name) {
  * Return an object with all codes and flags in the codebook
  *
  * @param question the name of the question, used in the sheet title
- * @param {boolean} flagsOnly if true, only return the flags
  */
 function getCodesAndFlags(question) {
   var codebookSheetName = question + '_codebook';
