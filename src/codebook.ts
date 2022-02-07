@@ -5,12 +5,6 @@ type CellOrRange = Cell | CellRange;
 const CODEBOOK_HEADER_FINAL = 'Code - final';
 const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
 
-class QcasError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
 /**
  * Return specified sheet
  */
