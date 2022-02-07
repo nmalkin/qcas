@@ -12,7 +12,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "make && cat build/Code.gs | pbcopy"
+    "build": "tsc",
+    "buildAndCopy": "tsc && cat build/Code.gs | pbcopy"
   },
   "author": "",
   "license": "AGPL-3.0",
