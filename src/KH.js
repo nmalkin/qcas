@@ -15,9 +15,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-var CODES_SEPARATOR = ',';
+const CODES_SEPARATOR = ',';
 
-var FIRST_ROW = 2;
+const FIRST_ROW = 2;
 
 function filterEmpty(array) {
   return array.filter(function (value) {
@@ -30,30 +30,30 @@ function getCodeList(cell) {
 }
 
 function CONCORDANCE(cellA, cellB, questionId) {
-  var codeListA = getCodeList(cellA);
-  var codeListB = getCodeList(cellB);
+  let codeListA = getCodeList(cellA);
+  let codeListB = getCodeList(cellB);
 
   if (codeListA.length === 0 && codeListB.length === 0) {
     return '';
   }
 
   // Get the flags from the codebook, so we know which entries to ignore
-  var codesAndFlags = getCodesAndFlags(questionId);
+  let codesAndFlags = getCodesAndFlags(questionId);
 
   // Let the variables a_i, and b_i, denote the numbers of attributes for the i-th unit chosen by raters A and B, respectively
-  var a_i = 0;
-  var b_i = 0;
-  for (var i = 0; i < codeListB.length; i++) {
-    var el = codeListB[i];
+  let a_i = 0;
+  let b_i = 0;
+  for (let i = 0; i < codeListB.length; i++) {
+    let el = codeListB[i];
     if (codesAndFlags.codes.includes(el)) {
       b_i++;
     }
   }
 
   // Let the random variable Xi denote the number of elements common to the sets A_i and B_i
-  var x_i = 0;
-  for (var i = 0; i < codeListA.length; i++) {
-    var el = codeListA[i];
+  let x_i = 0;
+  for (let i = 0; i < codeListA.length; i++) {
+    let el = codeListA[i];
     if (codesAndFlags.codes.includes(el)) {
       a_i++;
 
@@ -70,43 +70,43 @@ function CONCORDANCE(cellA, cellB, questionId) {
   }
 
   // The observed proportion of concordance is pi_hat_i = x_i / max(a_i, b_i)
-  var pi_hat_i = x_i / Math.max(a_i, b_i);
+  let pi_hat_i = x_i / Math.max(a_i, b_i);
   return pi_hat_i;
 }
 
 function MINCOUNT(cellA, cellB, questionId) {
-  var codeListA = getCodeList(cellA);
-  var codeListB = getCodeList(cellB);
+  let codeListA = getCodeList(cellA);
+  let codeListB = getCodeList(cellB);
 
-  var a_i = codeListA.length;
-  var b_i = codeListB.length;
+  let a_i = codeListA.length;
+  let b_i = codeListB.length;
 
   if (a_i === 0 && b_i === 0) {
     return '';
   }
 
   // Don't count flags
-  var codesAndFlags = getCodesAndFlags(questionId);
-  for (var i = 0; i < codeListA.length; i++) {
-    var el = codeListA[i];
+  let codesAndFlags = getCodesAndFlags(questionId);
+  for (let i = 0; i < codeListA.length; i++) {
+    let el = codeListA[i];
     if (codesAndFlags.flags.includes(el)) {
       a_i--;
     }
   }
-  for (var i = 0; i < codeListB.length; i++) {
-    var el = codeListB[i];
+  for (let i = 0; i < codeListB.length; i++) {
+    let el = codeListB[i];
     if (codesAndFlags.flags.includes(el)) {
       b_i--;
     }
   }
 
-  var minCount = Math.min(a_i, b_i);
+  let minCount = Math.min(a_i, b_i);
   return minCount;
 }
 
 function computeKupperHafner() {
   // Check that the selected range is valid
-  var currentSelection = SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
+  let currentSelection = SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
   // TODO: may need separate validRange function - or just a new name
   if (!validRangeForConflicts(currentSelection)) {
     showConflictInstructions();
@@ -114,49 +114,49 @@ function computeKupperHafner() {
   }
 
   // Insert new columns (after the selected ones)
-  var newColumnIndex = insertColumns(currentSelection, 2, [
+  let newColumnIndex = insertColumns(currentSelection, 2, [
     'Concordance',
     'MinCount',
   ]);
 
   // Get handles to the columns with the codes
-  var currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var questionId = isCodeSheet(currentSheet);
-  var leftColumn = currentSelection.getColumn();
-  var rightColumn = currentSelection.getLastColumn();
+  let currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  let questionId = isCodeSheet(currentSheet);
+  let leftColumn = currentSelection.getColumn();
+  let rightColumn = currentSelection.getLastColumn();
 
-  var currentRow = FIRST_ROW;
+  let currentRow = FIRST_ROW;
   // For each code:
   while (currentRow <= currentSheet.getLastRow()) {
-    var leftCell = currentSheet
+    let leftCell = currentSheet
       .getRange(currentRow, leftColumn)
       .getA1Notation();
-    var rightCell = currentSheet
+    let rightCell = currentSheet
       .getRange(currentRow, rightColumn)
       .getA1Notation();
 
-    var concordanceString =
+    let concordanceString =
       '=CONCORDANCE(' + leftCell + ',' + rightCell + ',"' + questionId + '")';
-    var minCountString =
+    let minCountString =
       '=MINCOUNT(' + leftCell + ',' + rightCell + ',"' + questionId + '")';
 
-    var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
+    let outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
     outputRange.setValues([[concordanceString, minCountString]]);
 
     currentRow++;
   }
 
-  var concordanceColumn = currentSheet
+  let concordanceColumn = currentSheet
     .getRange(FIRST_ROW, newColumnIndex, currentRow - FIRST_ROW, 1)
     .getA1Notation();
-  var piHat =
+  let piHat =
     '=SUM(' + concordanceColumn + ')/COUNT(' + concordanceColumn + ')';
 
-  var codebook = getCodesAndFlags(questionId).codes;
-  var minCountColumn = currentSheet
+  let codebook = getCodesAndFlags(questionId).codes;
+  let minCountColumn = currentSheet
     .getRange(FIRST_ROW, newColumnIndex + 1, currentRow - FIRST_ROW, 1)
     .getA1Notation();
-  var pi_0 =
+  let pi_0 =
     '=SUM(' +
     minCountColumn +
     ')/(COUNT(' +
@@ -165,11 +165,11 @@ function computeKupperHafner() {
     codebook.length +
     ')';
 
-  var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 3, 2);
-  var piHatRange = outputRange.getCell(1, 2).getA1Notation();
-  var pi0Range = outputRange.getCell(2, 2).getA1Notation();
+  let outputRange = currentSheet.getRange(currentRow, newColumnIndex, 3, 2);
+  let piHatRange = outputRange.getCell(1, 2).getA1Notation();
+  let pi0Range = outputRange.getCell(2, 2).getA1Notation();
 
-  var concordance =
+  let concordance =
     '=(' + piHatRange + '-' + pi0Range + ')/(1-' + pi0Range + ')';
 
   outputRange.setValues([

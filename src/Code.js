@@ -15,20 +15,20 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-var CODEBOOK_HEADER_CODE = 'Code';
-var CODEBOOK_HEADER_TYPE = 'Type';
-var CODEBOOK_TYPE_CODE = 'code';
-var CODEBOOK_TYPE_FLAG = 'flag';
-var CODEBOOK_PATTERN = /(\w+)_codebook/;
-var CODING_PATTERN = /(\w+)_codes(_\w+)?/;
-var FINAL_CODES_PATTERN = /(\w+)_codes_final/;
+const CODEBOOK_HEADER_CODE = 'Code';
+const CODEBOOK_HEADER_TYPE = 'Type';
+const CODEBOOK_TYPE_CODE = 'code';
+const CODEBOOK_TYPE_FLAG = 'flag';
+const CODEBOOK_PATTERN = /(\w+)_codebook/;
+const CODING_PATTERN = /(\w+)_codes(_\w+)?/;
+const FINAL_CODES_PATTERN = /(\w+)_codes_final/;
 
-var FIRST_ROW = 2; // Assuming a header, row 2 is always the first row.
+const FIRST_ROW = 2; // Assuming a header, row 2 is always the first row.
 
-var CODES_SEPARATOR = ',';
+const CODES_SEPARATOR = ',';
 
 function alert(message) {
-  var ui = SpreadsheetApp.getUi();
+  let ui = SpreadsheetApp.getUi();
   ui.alert(message, ui.ButtonSet.OK);
 }
 
@@ -36,7 +36,7 @@ function alert(message) {
  * Return specified sheet
  */
 function getSheet(sheetName) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  let sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
   if (sheet == null) {
     alert("Couldn't find a sheet with the name " + sheetName);
   }
@@ -54,7 +54,7 @@ function getSheetHeader(sheet) {
  * Return the given array with trailing empty values removed
  */
 function truncateEmptyArray(arr) {
-  var next = arr.pop();
+  let next = arr.pop();
   while (next == '') {
     next = arr.pop();
   }
@@ -69,11 +69,11 @@ function truncateEmptyArray(arr) {
  * Given a Range, return a flattened array with all its values.
  */
 function getAllValues(range) {
-  var data = [];
-  var values = range.getValues();
-  for (var i = 0; i < range.getHeight(); i++) {
-    for (var j = 0; j < range.getWidth(); j++) {
-      var value = values[i][j];
+  let data = [];
+  let values = range.getValues();
+  for (let i = 0; i < range.getHeight(); i++) {
+    for (let j = 0; j < range.getWidth(); j++) {
+      let value = values[i][j];
       data.push(value);
     }
   }
@@ -85,8 +85,8 @@ function getAllValues(range) {
  * Given a sheet and a column name, return that column's number
  */
 function getColumnNumberByName(sheet, name) {
-  var header = getAllValues(getSheetHeader(sheet));
-  for (var i = 0; i < header.length; i++) {
+  let header = getAllValues(getSheetHeader(sheet));
+  for (let i = 0; i < header.length; i++) {
     if (header[i] === name) {
       return i + 1; // add 1 because columns are 1-indexed :-/
     }
@@ -101,32 +101,32 @@ function getColumnNumberByName(sheet, name) {
  * @param question the name of the question, used in the sheet title
  */
 function getCodesAndFlags(question) {
-  var codebookSheetName = question + '_codebook';
-  var sheet = getSheet(codebookSheetName);
+  let codebookSheetName = question + '_codebook';
+  let sheet = getSheet(codebookSheetName);
 
   // Find the range where the relevant codebook columns are located
-  var codeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_CODE);
-  var typeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_TYPE);
-  var firstColumn = Math.min(codeColumn, typeColumn);
-  var lastColumn = Math.max(codeColumn, typeColumn);
-  var range = sheet.getRange(
+  let codeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_CODE);
+  let typeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_TYPE);
+  let firstColumn = Math.min(codeColumn, typeColumn);
+  let lastColumn = Math.max(codeColumn, typeColumn);
+  let range = sheet.getRange(
     FIRST_ROW,
     firstColumn,
     sheet.getLastRow() - 1,
     lastColumn - firstColumn + 1
   );
 
-  var values = range.getValues();
-  var codes = [],
+  let values = range.getValues();
+  let codes = [],
     flags = [];
-  for (var i = 0; i < range.getHeight(); i++) {
-    var code = values[i][codeColumn - firstColumn];
+  for (let i = 0; i < range.getHeight(); i++) {
+    let code = values[i][codeColumn - firstColumn];
     if (code === '') {
       // Tolerate holes in codebook
       continue;
     }
 
-    var type = values[i][typeColumn - firstColumn];
+    let type = values[i][typeColumn - firstColumn];
     if (type === '') {
       // If no type is specified, assume it's a code
       type = CODEBOOK_TYPE_CODE;
@@ -155,7 +155,7 @@ function getCodesAndFlags(question) {
  * @param {boolean} flagsOnly if true, only return the flags
  */
 function getCodebook(question, flagsOnly) {
-  var codesAndFlags = getCodesAndFlags(question);
+  let codesAndFlags = getCodesAndFlags(question);
 
   if (flagsOnly) {
     return codesAndFlags.flags;
@@ -172,37 +172,37 @@ function getCodebook(question, flagsOnly) {
  */
 function replaceShortcutCodes(question, e) {
   // Check that we're dealing with only 1 cell
-  var range = e.range;
+  let range = e.range;
   if (range.getWidth() > 1 || range.getHeight() > 1) {
     return;
   }
 
   // Check that the values we're substiting
-  var value = e.value;
+  let value = e.value;
   Logger.log('checking value %s', value);
-  var re = /^[0-9 ]+$/;
+  let re = /^[0-9 ]+$/;
   if (!re.test(value)) {
     return;
   }
 
   Logger.log('looking up values');
 
-  var codebook = getCodebook(question);
-  var values = value.split(' ');
-  var codes = values.map(function (value) {
-    var index = parseInt(value) - 1;
+  let codebook = getCodebook(question);
+  let values = value.split(' ');
+  let codes = values.map(function (value) {
+    let index = parseInt(value) - 1;
 
     if (index < 0 || index >= codebook.length) {
       return '?';
     }
 
-    var code = codebook[index];
+    let code = codebook[index];
     return code;
   });
 
   Logger.log('performing substitution');
 
-  var newValue = codes.join(CODES_SEPARATOR);
+  let newValue = codes.join(CODES_SEPARATOR);
   range.setValue(newValue);
 }
 
@@ -214,7 +214,7 @@ function validRangeForConflicts(range) {
 }
 
 function showConflictInstructions() {
-  var message =
+  let message =
     'To start conflict resolution, please select ' +
     'the two columns that contain the codes to be resolved.';
   alert(message);
@@ -229,15 +229,15 @@ function showConflictInstructions() {
  */
 function insertColumns(range, howMany, names) {
   // Figure out where to put the columns
-  var position = range.getLastColumn();
+  let position = range.getLastColumn();
 
   // Insert the columns
-  var sheet = range.getSheet();
+  let sheet = range.getSheet();
   sheet.insertColumnsAfter(position, howMany);
 
   // Give them appropriate titles
-  var newColumnIndex = position + 1;
-  var header = sheet.getRange(1, newColumnIndex, 1, howMany);
+  let newColumnIndex = position + 1;
+  let header = sheet.getRange(1, newColumnIndex, 1, howMany);
   header.setValues([names]);
 
   return newColumnIndex;
@@ -258,13 +258,13 @@ function insertConflictColumns(range) {
  * @param flags ignore any differences in flags
  */
 function computeDiff(a, b, flags) {
-  var both = [],
+  let both = [],
     onlyA = [],
     onlyB = [];
 
   // Check whether each value in A is in B
-  for (var i = 0; i < a.length; i++) {
-    var el = a[i];
+  for (let i = 0; i < a.length; i++) {
+    let el = a[i];
     if (b.includes(el)) {
       both.push(el);
     } else if (flags.includes(el)) {
@@ -275,8 +275,8 @@ function computeDiff(a, b, flags) {
   }
 
   // Now check whether each value in B is in A
-  for (var i = 0; i < b.length; i++) {
-    var el = b[i];
+  for (let i = 0; i < b.length; i++) {
+    let el = b[i];
     if (a.includes(el)) {
       // Don't need to add to "both" because first loop already covered it
     } else if (flags.includes(el)) {
@@ -297,7 +297,7 @@ function computeDiff(a, b, flags) {
  * Given a diff object (@see computeDiff) return string representation of it
  */
 function formatDiff(diff) {
-  var str = '';
+  let str = '';
   if (diff.both.length > 0) {
     str += diff.both.join(CODES_SEPARATOR);
   }
@@ -312,20 +312,20 @@ function formatDiff(diff) {
 
 function cellDifferences(leftCell, rightCell) {
   // Get the codes
-  var leftValues = leftCell.split(CODES_SEPARATOR);
-  var rightValues = rightCell.split(CODES_SEPARATOR);
+  let leftValues = leftCell.split(CODES_SEPARATOR);
+  let rightValues = rightCell.split(CODES_SEPARATOR);
 
   // Find commonalities and differences
-  var flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
-  var diff = computeDiff(leftValues, rightValues, flags);
+  let flags = getCodebook(isCodeSheet(SpreadsheetApp.getActiveSheet()), true);
+  let diff = computeDiff(leftValues, rightValues, flags);
   return diff;
 }
 
 function CODES_AGREE(cellA, cellB) {
   // Check if any (real) differences remain
-  var diff = cellDifferences(cellA, cellB);
-  var status;
-  var difference = diff.onlyA.concat(diff.onlyB);
+  let diff = cellDifferences(cellA, cellB);
+  let status;
+  let difference = diff.onlyA.concat(diff.onlyB);
   if (difference.length == 0) {
     status = 'agree';
   } else {
@@ -341,34 +341,34 @@ function CODES_AGREE(cellA, cellB) {
  */
 function findConflicts() {
   // Check that we can actually compute conflicts for this range.
-  var currentSelection = SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
+  let currentSelection = SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
   if (!validRangeForConflicts(currentSelection)) {
     showConflictInstructions();
     return;
   }
 
   // Insert new columns (after the selected ones) to hold conflict information.
-  var newColumnIndex = insertConflictColumns(currentSelection);
+  let newColumnIndex = insertConflictColumns(currentSelection);
 
   // Get handles to the columns with the codes to be resolved
-  var currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var leftColumn = currentSelection.getColumn();
-  var rightColumn = currentSelection.getLastColumn();
+  let currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  let leftColumn = currentSelection.getColumn();
+  let rightColumn = currentSelection.getLastColumn();
 
-  var currentRow = 2;
+  let currentRow = 2;
   // For each code:
   while (currentRow <= currentSheet.getLastRow()) {
-    var leftCell = currentSheet.getRange(currentRow, leftColumn);
-    var rightCell = currentSheet.getRange(currentRow, rightColumn);
+    let leftCell = currentSheet.getRange(currentRow, leftColumn);
+    let rightCell = currentSheet.getRange(currentRow, rightColumn);
 
-    var leftCellValue = leftCell.getValue();
-    var rightCellValue = rightCell.getValue();
+    let leftCellValue = leftCell.getValue();
+    let rightCellValue = rightCell.getValue();
     // TODO: the profiler says the getValue call is expensive. Replace it with
     // getValues outside the loop.
 
-    var diff = cellDifferences(leftCellValue, rightCellValue);
-    var diffStr = formatDiff(diff);
-    var agreementCommand =
+    let diff = cellDifferences(leftCellValue, rightCellValue);
+    let diffStr = formatDiff(diff);
+    let agreementCommand =
       '=CODES_AGREE(' +
       leftCell.getA1Notation() +
       ',' +
@@ -376,7 +376,7 @@ function findConflicts() {
       ')';
 
     // Write the results
-    var outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
+    let outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
     outputRange.setValues([[diffStr, agreementCommand]]);
 
     if (CODES_AGREE(leftCellValue, rightCellValue) == 'conflict') {
@@ -391,7 +391,7 @@ function findConflicts() {
  * Clear the color in the given cell if it doesn't have conflicts anymore
  */
 function updateConflictColors(e) {
-  var currentColor = e.range.getBackground();
+  let currentColor = e.range.getBackground();
   // Only handle cells that were marked as conflicted (using yellow color)
   if (currentColor == '#ffff00') {
     if (e.value.indexOf('<') === -1 && e.value.indexOf('>') === -1) {
@@ -409,8 +409,8 @@ function updateConflictColors(e) {
  * @return the name of the question being coded, or null if there is none
  */
 function isCodeSheet(sheet) {
-  var sheetName = sheet.getName();
-  var match = CODING_PATTERN.exec(sheetName);
+  let sheetName = sheet.getName();
+  let match = CODING_PATTERN.exec(sheetName);
   if (match) {
     return match[1];
   } else {
@@ -424,8 +424,8 @@ function isCodeSheet(sheet) {
 function onEdit(e) {
   Logger.log('edit received');
 
-  var sheet = e.range.getSheet();
-  var code = isCodeSheet(sheet);
+  let sheet = e.range.getSheet();
+  let code = isCodeSheet(sheet);
   if (code) {
     replaceShortcutCodes(code, e);
   }
@@ -436,7 +436,7 @@ function onEdit(e) {
 }
 
 function showCodebook() {
-  var html = HtmlService.createTemplateFromFile('sidebar')
+  let html = HtmlService.createTemplateFromFile('sidebar')
     .evaluate()
     .setTitle('Coding Assistant');
   SpreadsheetApp.getUi().showSidebar(html);
@@ -446,15 +446,15 @@ function showCodebook() {
  * Get the question ID for the currently selected question
  */
 function getCurrentQuestionCode() {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  let sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   // Is the current sheet a coding sheet?
-  var question = isCodeSheet(sheet);
+  let question = isCodeSheet(sheet);
   if (question !== null) {
     return question;
   }
 
   // Else, is the current sheet a codebook sheet?
-  var match = CODEBOOK_PATTERN.exec(sheet.getName());
+  let match = CODEBOOK_PATTERN.exec(sheet.getName());
   if (match) {
     return match[1];
   }

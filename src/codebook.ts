@@ -1,7 +1,3 @@
-type Cell = string;
-type CellRange = Array<Array<string>>;
-type CellOrRange = Cell | CellRange;
-
 const CODEBOOK_HEADER_FINAL = 'Code - final';
 const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
 
@@ -9,7 +5,7 @@ const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
  * Return specified sheet
  */
 function getSheetOrError_(sheetName: string) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
   if (sheet == null) {
     throw new QcasError("Couldn't find a sheet with the name " + sheetName);
   }
