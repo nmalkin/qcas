@@ -1,6 +1,3 @@
-const CODEBOOK_HEADER_FINAL = 'Code - final';
-const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
-
 /**
  * Return sheet with given name
  * @throws if no sheet with given name is found

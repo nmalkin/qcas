@@ -15,10 +15,6 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const CODES_SEPARATOR = ',';
-
-const FIRST_ROW = 2;
-
 function filterEmpty(array) {
   return array.filter(function (value) {
     return value != '';

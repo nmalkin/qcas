@@ -15,18 +15,6 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-const CODEBOOK_HEADER_CODE = 'Code';
-const CODEBOOK_HEADER_TYPE = 'Type';
-const CODEBOOK_TYPE_CODE = 'code';
-const CODEBOOK_TYPE_FLAG = 'flag';
-const CODEBOOK_PATTERN = /(\w+)_codebook/;
-const CODING_PATTERN = /(\w+)_codes(_\w+)?/;
-const FINAL_CODES_PATTERN = /(\w+)_codes_final/;
-
-const FIRST_ROW = 2; // Assuming a header, row 2 is always the first row.
-
-const CODES_SEPARATOR = ',';
-
 function alert(message) {
   let ui = SpreadsheetApp.getUi();
   ui.alert(message, ui.ButtonSet.OK);
