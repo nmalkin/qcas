@@ -1,2 +1,2 @@
-build/Code.gs: array.js Code.js KH.js
+build/Code.gs: array.js Code.js KH.js codebook.js
 	cat $^ > $@
