@@ -1,8 +1,12 @@
+type Cell = string;
+type CellRange = Array<Array<string>>;
+type CellOrRange = Cell | CellRange;
+
 const CODEBOOK_HEADER_FINAL = 'Code - final';
-const CODEBOOK_SHEET_NAME = (questionId) => questionId + '_codebook';
+const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
 
 class QcasError extends Error {
-  constructor(message) {
+  constructor(message: string) {
     super(message);
   }
 }
@@ -10,15 +14,15 @@ class QcasError extends Error {
 /**
  * Return specified sheet
  */
-function getSheetOrError_(sheetName) {
+function getSheetOrError_(sheetName: string) {
   var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
   if (sheet == null) {
-    throw QcasError("Couldn't find a sheet with the name " + sheetName);
+    throw new QcasError("Couldn't find a sheet with the name " + sheetName);
   }
   return sheet;
 }
 
-function getCodebookSheet_(questionId) {
+function getCodebookSheet_(questionId: string) {
   const codebookSheetName = CODEBOOK_SHEET_NAME(questionId);
   const sheet = getSheetOrError_(codebookSheetName);
   return sheet;
@@ -29,7 +33,7 @@ function getCodebookSheet_(questionId) {
  *
  * @param question the name of the question, used in the sheet title
  */
-function getCodeToFinalNameMapping_(question) {
+function getCodeToFinalNameMapping_(question: string) {
   const sheet = getCodebookSheet_(question);
 
   // Find the range where the relevant codebook columns are located
@@ -46,7 +50,7 @@ function getCodeToFinalNameMapping_(question) {
   );
   const values = range.getValues();
 
-  const codeNameMappings = {};
+  const codeNameMappings: Record<string, string> = {};
 
   for (let i = 0; i < range.getHeight(); i++) {
     const codeName = values[i][codeNameColumn - firstColumn];
@@ -73,16 +77,22 @@ function getCodeToFinalNameMapping_(question) {
  * @return original code names returned to input
  * @customfunction
  */
-function FINALNAMES(input) {
-  const questionId = getCurrentQuestionCode();
+function FINALNAMES(input: CellOrRange) {
+  const questionId: string | null = getCurrentQuestionCode();
+  if (!questionId) {
+    throw new QcasError(
+      "couldn't determine which codebook current sheet is associated with"
+    );
+  }
+
   const mappings = getCodeToFinalNameMapping_(questionId);
 
-  const mapCellContents = (cellContents) => {
+  const mapCellContents = (cellContents: string) => {
     const codeList = getCodeList(cellContents);
 
-    const renamedCodes = codeList.map((code) => {
+    const renamedCodes = codeList.map((code: string) => {
       if (!(code in mappings)) {
-        throw QcasError(`ERROR: ${code} not found in codebook`);
+        throw new QcasError(`ERROR: ${code} not found in codebook`);
       }
 
       return mappings[code];
