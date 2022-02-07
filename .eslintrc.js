@@ -15,8 +15,8 @@ module.exports = {
     'valid-jsdoc': 'off',
     'no-unused-vars': ['off'],
     '@typescript-eslint/no-unused-vars': [
-      'off',
-      // 'error', { vars: 'local', args: 'after-used', ignoreRestSiblings: false },
+      'error',
+      { varsIgnorePattern: '[A-Z]+' },
     ],
   },
 };
