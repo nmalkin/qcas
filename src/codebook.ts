@@ -2,9 +2,12 @@ const CODEBOOK_HEADER_FINAL = 'Code - final';
 const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
 
 /**
- * Return specified sheet
+ * Return sheet with given name
+ * @throws if no sheet with given name is found
  */
-function getSheetOrError_(sheetName: string) {
+function getSheetOrError_(
+  sheetName: string
+): GoogleAppsScript.Spreadsheet.Sheet {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
   if (sheet == null) {
     throw new QcasError("Couldn't find a sheet with the name " + sheetName);
@@ -12,7 +15,14 @@ function getSheetOrError_(sheetName: string) {
   return sheet;
 }
 
-function getCodebookSheet_(questionId: string) {
+/**
+ * Return codebook sheet for the given question
+ * @param questionId
+ * @returns
+ */
+function getCodebookSheet_(
+  questionId: string
+): GoogleAppsScript.Spreadsheet.Sheet {
   const codebookSheetName = CODEBOOK_SHEET_NAME(questionId);
   const sheet = getSheetOrError_(codebookSheetName);
   return sheet;
@@ -23,7 +33,7 @@ function getCodebookSheet_(questionId: string) {
  *
  * @param question the name of the question, used in the sheet title
  */
-function getCodeToFinalNameMapping_(question: string) {
+function getCodeToFinalNameMapping_(question: string): Record<string, string> {
   const sheet = getCodebookSheet_(question);
 
   // Find the range where the relevant codebook columns are located
@@ -67,7 +77,7 @@ function getCodeToFinalNameMapping_(question: string) {
  * @return original code names returned to input
  * @customfunction
  */
-function FINALNAMES(input: CellOrRange) {
+function FINALNAMES(input: CellOrRange): CellOrRange {
   const questionId: string | null = getCurrentQuestionCode();
   if (!questionId) {
     throw new QcasError(
