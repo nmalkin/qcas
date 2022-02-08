@@ -1,3 +1,3 @@
-type Cell = string;
-type CellRange = Array<Array<string>>;
+type Cell = number | string | Date;
+type CellRange = Array<Array<Cell>>;
 type CellOrRange = Cell | CellRange;

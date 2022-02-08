@@ -84,8 +84,8 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
 
   const mappings = getCodeToFinalNameMapping_(questionId);
 
-  const mapCellContents = (cellContents: string) => {
-    const codeList = getCodeList(cellContents);
+  const mapCellContents = (cellContents: Cell) => {
+    const codeList = getCodeList(cellContents.toString());
 
     const renamedCodes = codeList.map((code: string) => {
       if (!(code in mappings)) {
