@@ -186,3 +186,44 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
     return mapCellContents(input);
   }
 }
+
+/**
+ * Filter flags from given code cells
+ * @param {string | Array<Array<string>>} input
+ * @return input codes but with flags removed
+ * @customfunction
+ */
+function FILTERFLAGS(input: CellOrRange): CellOrRange {
+  const questionId: string | null = getCurrentQuestionCode();
+  if (!questionId) {
+    throw new QcasError(
+      "couldn't determine which codebook current sheet is associated with"
+    );
+  }
+
+  const codesAndFlags = getCodesAndFlags(questionId);
+  const allCodes = new Set(codesAndFlags.codes);
+  const allFlags = new Set(codesAndFlags.flags);
+
+  const filterCellContents = (cellContents: Cell) => {
+    const codeList = getCodesInCell_(cellContents);
+
+    const filteredCodes = codeList.filter((code: string) => {
+      if (allCodes.has(code)) {
+        return true;
+      } else if (allFlags.has(code)) {
+        return false;
+      } else {
+        throw new QcasError(`ERROR: ${code} not found in codebook`);
+      }
+    });
+
+    return filteredCodes.join(',');
+  };
+
+  if (isRange_(input)) {
+    return input.map((row) => row.map((cell) => filterCellContents(cell)));
+  } else {
+    return filterCellContents(input);
+  }
+}
