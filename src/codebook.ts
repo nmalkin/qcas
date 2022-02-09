@@ -69,6 +69,17 @@ function getCodeToFinalNameMapping_(question: string): Record<string, string> {
 }
 
 /**
+ * Get a deduplicated list of all final names for the codes in the codebook
+ *
+ * @param questionId
+ */
+function getFinalCodeList_(questionId: string): string[] {
+  const mappings = getCodeToFinalNameMapping_(questionId);
+  const allFinalNames = Object.values(mappings);
+  return allFinalNames.unique();
+}
+
+/**
  *
  * @param {string | Array<Array<string>>} input
  * @return original code names returned to input
