@@ -26,5 +26,6 @@ function onOpen() {
         .addItem('Infer codebook', 'computeKupperHafnerInfer')
         .addItem('Referencing codebook', 'computeKupperHafnerReference')
     )
+    .addItem("Compute Cohen's kappa", 'computeCohensKappa_')
     .addToUi();
 }
