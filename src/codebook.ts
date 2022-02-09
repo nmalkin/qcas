@@ -174,7 +174,7 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
       return mappings[code];
     });
 
-    return renamedCodes.join(',');
+    return renamedCodes.unique().join(',');
   };
 
   if (isRange_(input)) {
