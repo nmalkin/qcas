@@ -194,13 +194,6 @@ function replaceShortcutCodes(question, e) {
   range.setValue(newValue);
 }
 
-/**
- * Check if the given range is a valid selection for conflict resolution
- */
-function validRangeForConflicts(range) {
-  return range.getWidth() == 2;
-}
-
 function showConflictInstructions() {
   let message =
     'To start conflict resolution, please select ' +
@@ -210,7 +203,7 @@ function showConflictInstructions() {
 
 /**
  * Insert 2 columns after the ones in the specified range
- * @param {Range} range
+ * @param {GoogleAppsScript.Spreadsheet.Range} range
  * @param {Integer} howMany how many columns to insert
  * @param {Array} names the names to put in the first row of the new columns
  * @return {Integer} the index of the first newly created column
