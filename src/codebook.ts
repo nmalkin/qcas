@@ -25,15 +25,17 @@ function getCodebookSheet_(
   return sheet;
 }
 
+interface CodesAndFlags {
+  codes: string[];
+  flags: string[];
+}
+
 /**
  * Return an object with all codes and flags in the codebook
  *
  * @param question the name of the question, used in the sheet title
  */
-function getCodesAndFlags(question: string): {
-  codes: string[];
-  flags: string[];
-} {
+function getCodesAndFlags(question: string): CodesAndFlags {
   const sheet = getCodebookSheet_(question);
 
   // Find the range where the relevant codebook columns are located

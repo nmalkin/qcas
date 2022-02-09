@@ -1,9 +1,16 @@
+/**
+ * Compute concordance between the pairs of codes in the given range
+ * @param cells
+ * @param questionId the question id, used to look up the codebook. Codes listed as "flag"s in that codebook will not be included in calculation. If omitted, the codebook will be inferred from the contents of the range (i.e., only codes that appear in it will be used in the counts), but the function will be unable to distinguish between codes and flags.
+ * @returns
+ */
 function CONCORDANCE(
   cells: CellRange,
-  questionId: string
+  questionId?: string
 ): Array<Array<Cell | null>> {
-  // Get the flags from the codebook, so we know which entries to ignore
-  const codesAndFlags = getCodesAndFlags(questionId);
+  const codesAndFlags: CodesAndFlags = questionId
+    ? getCodesAndFlags(questionId) // Get the flags from the codebook, so we know which entries to ignore
+    : { codes: allUniqueCodesInRange_(cells), flags: [] }; // Infer the codebook by taking all unique codes in the range
 
   const computeConcordanceForCells = (
     cellA: Cell,
@@ -65,9 +72,11 @@ function CONCORDANCE(
 
 function MINCOUNT(
   cells: CellRange,
-  questionId: string
+  questionId?: string
 ): Array<Array<Cell | null>> {
-  const codesAndFlags = getCodesAndFlags(questionId);
+  const codesAndFlags: CodesAndFlags = questionId
+    ? getCodesAndFlags(questionId) // Get the flags from the codebook, so we know which entries to ignore
+    : { codes: allUniqueCodesInRange_(cells), flags: [] }; // Infer the codebook by taking all unique codes in the range
 
   const computeMinCountForCells = (cellA: Cell, cellB: Cell): number | null => {
     const codeListA = getCodesInCell_(cellA);
@@ -111,7 +120,7 @@ function MINCOUNT(
   });
 }
 
-function computeKupperHafner() {
+function computeKupperHafner_(inferCodebook: boolean) {
   const currentSelection =
     SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
   // Check that the selected range is valid
@@ -142,10 +151,15 @@ function computeKupperHafner() {
   const bottomRight = currentSheet
     .getRange(lastRow, rightColumn)
     .getA1Notation();
+  const codeRangeA1 = `${topLeft}:${bottomRight}`;
 
   // Populate columns with concordance and mincount values
-  const concordanceString = `=CONCORDANCE(${topLeft}:${bottomRight},"${questionId}")`;
-  const minCountString = `=MINCOUNT(${topLeft}:${bottomRight},"${questionId}")`;
+  const concordanceString = inferCodebook
+    ? `=CONCORDANCE(${codeRangeA1})`
+    : `=CONCORDANCE(${codeRangeA1},"${questionId}")`;
+  const minCountString = inferCodebook
+    ? `=MINCOUNT(${codeRangeA1})`
+    : `=MINCOUNT(${codeRangeA1},"${questionId}")`;
 
   const newColumnOutputRange = currentSheet.getRange(
     FIRST_ROW,
@@ -162,7 +176,9 @@ function computeKupperHafner() {
   const piHat =
     '=SUM(' + concordanceColumn + ')/COUNT(' + concordanceColumn + ')';
 
-  const codebook = getCodesAndFlags(questionId).codes;
+  const codebookSize: string = inferCodebook
+    ? `COUNTUNIQUECODES(${codeRangeA1})`
+    : getCodesAndFlags(questionId).codes.length.toString();
   const minCountColumn = currentSheet
     .getRange(FIRST_ROW, newColumnIndex + 1, lastRow + 1 - FIRST_ROW, 1)
     .getA1Notation();
@@ -172,7 +188,7 @@ function computeKupperHafner() {
     ')/(COUNT(' +
     minCountColumn +
     ')*' +
-    codebook.length +
+    codebookSize +
     ')';
 
   const summaryOutputRange = currentSheet.getRange(
@@ -192,4 +208,12 @@ function computeKupperHafner() {
     ['pi0', pi_0],
     ['Kupper-Hafner concordance', concordance],
   ]);
+}
+
+function computeKupperHafnerReference() {
+  computeKupperHafner_(false);
+}
+
+function computeKupperHafnerInfer() {
+  computeKupperHafner_(true);
 }

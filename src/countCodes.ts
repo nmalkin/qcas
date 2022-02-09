@@ -60,3 +60,22 @@ function COUNTCODEBOOK(input: CellOrRange): CellRange {
 
   return output;
 }
+function allUniqueCodesInRange_(cells: CellRange): string[] {
+  const allCodes = new Set<string>();
+  cells.forEach((row) =>
+    row.forEach((cell) =>
+      getCodesInCell_(cell).forEach((code) => allCodes.add(code))
+    )
+  );
+  return Array.from(allCodes);
+}
+
+/**
+ * Count the number of unique codes appearing in these cells
+ * @param cells
+ * @returns
+ * @customfunction
+ */
+function COUNTUNIQUECODES(cells: CellRange): number {
+  return allUniqueCodesInRange_(cells).length;
+}

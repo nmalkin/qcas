@@ -16,10 +16,15 @@ function onEdit(e: GoogleAppsScript.Events.SheetsOnEdit) {
 }
 
 function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('Coding Assistant')
+  const ui = SpreadsheetApp.getUi();
+  ui.createMenu('Coding Assistant')
     .addItem('Show codebook', 'showCodebook')
     .addItem('Find conflicts', 'findConflicts')
-    .addItem('Compute Kupper-Hafner agreement', 'computeKupperHafner')
+    .addSubMenu(
+      ui
+        .createMenu('Compute Kupper-Hafner agreement')
+        .addItem('Infer codebook', 'computeKupperHafnerInfer')
+        .addItem('Referencing codebook', 'computeKupperHafnerReference')
+    )
     .addToUi();
 }
