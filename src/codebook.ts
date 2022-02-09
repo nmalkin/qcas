@@ -109,7 +109,7 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
     return renamedCodes.join(',');
   };
 
-  if (Array.isArray(input)) {
+  if (isRange_(input)) {
     return input.map((row) => row.map((cell) => mapCellContents(cell)));
   } else {
     return mapCellContents(input);
