@@ -26,6 +26,77 @@ function getCodebookSheet_(
 }
 
 /**
+ * Return an object with all codes and flags in the codebook
+ *
+ * @param question the name of the question, used in the sheet title
+ */
+function getCodesAndFlags(question: string): {
+  codes: string[];
+  flags: string[];
+} {
+  const sheet = getCodebookSheet_(question);
+
+  // Find the range where the relevant codebook columns are located
+  const codeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_CODE);
+  const typeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_TYPE);
+  const firstColumn = Math.min(codeColumn, typeColumn);
+  const lastColumn = Math.max(codeColumn, typeColumn);
+  const range = sheet.getRange(
+    FIRST_ROW,
+    firstColumn,
+    sheet.getLastRow() - 1,
+    lastColumn - firstColumn + 1
+  );
+
+  const values = range.getValues();
+  const codes = [],
+    flags = [];
+  for (let i = 0; i < range.getHeight(); i++) {
+    const code = values[i][codeColumn - firstColumn];
+    if (code === '') {
+      // Tolerate holes in codebook
+      continue;
+    }
+
+    let type = values[i][typeColumn - firstColumn];
+    if (type === '') {
+      // If no type is specified, assume it's a code
+      type = CODEBOOK_TYPE_CODE;
+    }
+
+    if (type === CODEBOOK_TYPE_CODE) {
+      codes.push(code);
+    } else if (type === CODEBOOK_TYPE_FLAG) {
+      flags.push(code);
+    } else {
+      alert('Unrecognized code type ' + type + ' in codebook ' + question);
+      break;
+    }
+  }
+
+  return {
+    codes: codes,
+    flags: flags,
+  };
+}
+
+/**
+ * Return an array of all codes in the codebook
+ *
+ * @param question the name of the question, used in the sheet title
+ * @param {boolean} flagsOnly if true, only return the flags
+ */
+function getCodebook(question: string, flagsOnly: boolean | undefined) {
+  const codesAndFlags = getCodesAndFlags(question);
+
+  if (flagsOnly) {
+    return codesAndFlags.flags;
+  } else {
+    return codesAndFlags.codes.concat(codesAndFlags.flags);
+  }
+}
+
+/**
  * Return an object mapping all codes to their final values
  *
  * @param question the name of the question, used in the sheet title
