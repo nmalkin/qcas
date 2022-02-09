@@ -157,12 +157,7 @@ function getFinalCodeList_(questionId: string): string[] {
  * @customfunction
  */
 function FINALNAMES(input: CellOrRange): CellOrRange {
-  const questionId: string | null = getCurrentQuestionCode();
-  if (!questionId) {
-    throw new QcasError(
-      "couldn't determine which codebook current sheet is associated with"
-    );
-  }
+  const questionId = getCurrentQuestionCodeOrError_();
 
   const mappings = getCodeToFinalNameMapping_(questionId);
 
@@ -194,12 +189,7 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
  * @customfunction
  */
 function FILTERFLAGS(input: CellOrRange): CellOrRange {
-  const questionId: string | null = getCurrentQuestionCode();
-  if (!questionId) {
-    throw new QcasError(
-      "couldn't determine which codebook current sheet is associated with"
-    );
-  }
+  const questionId = getCurrentQuestionCodeOrError_();
 
   const codesAndFlags = getCodesAndFlags(questionId);
   const allCodes = new Set(codesAndFlags.codes);

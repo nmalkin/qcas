@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <? var question = getCurrentQuestionCode(); ?>
+  <? var question = getCurrentQuestionCodeOrError_(); ?>
   <? var codes = getCodebook(question); ?>
     <table>
       <? for (var i = 0; i < codes.length; i++) { ?>

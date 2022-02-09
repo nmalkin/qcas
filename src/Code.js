@@ -229,27 +229,6 @@ function showCodebook() {
   SpreadsheetApp.getUi().showSidebar(html);
 }
 
-/**
- * Get the question ID for the currently selected question
- */
-function getCurrentQuestionCode() {
-  let sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  // Is the current sheet a coding sheet?
-  let question = isCodeSheet(sheet);
-  if (question !== null) {
-    return question;
-  }
-
-  // Else, is the current sheet a codebook sheet?
-  let match = CODEBOOK_PATTERN.exec(sheet.getName());
-  if (match) {
-    return match[1];
-  }
-
-  // Otherwise, I really have no idea what sheet this is.
-  return null;
-}
-
 function onOpen() {
   SpreadsheetApp.getUi()
     .createMenu('Coding Assistant')
