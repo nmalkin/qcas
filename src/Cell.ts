@@ -13,5 +13,5 @@ function filterEmpty_(array: string[]) {
 }
 
 function getCodesInCell_(cell: Cell): string[] {
-  return filterEmpty(cell.toString().split(CODES_SEPARATOR)).unique();
+  return filterEmpty_(cell.toString().split(CODES_SEPARATOR)).unique();
 }
