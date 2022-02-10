@@ -68,6 +68,9 @@ function COHEN_PROBABILITY(cells: CellRange): number {
     }
 
     let [codeA, codeB] = row;
+    validateCellHasOneCode_(codeA);
+    validateCellHasOneCode_(codeB);
+
     codeA = codeA.toString();
     codeB = codeB.toString();
 
