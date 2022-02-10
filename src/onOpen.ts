@@ -27,5 +27,9 @@ function onOpen() {
         .addItem('Referencing codebook', 'computeKupperHafnerReference')
     )
     .addItem("Compute Cohen's kappa", 'computeCohensKappa_')
+    .addItem(
+      "Compute Cohen's kappa (multi-code)",
+      'computeCohensKappaNonExclusive_'
+    )
     .addToUi();
 }
