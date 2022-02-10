@@ -146,7 +146,7 @@ function computeKupperHafner_(inferCodebook: boolean) {
   // Get handles to the columns with the codes
   const leftColumn = currentSelection.getColumn();
   const rightColumn = currentSelection.getLastColumn();
-  const lastRow = currentSheet.getLastRow();
+  const lastRow = getLastRowInColumn_(currentSheet, leftColumn);
   const topLeft = currentSheet.getRange(FIRST_ROW, leftColumn).getA1Notation();
   const bottomRight = currentSheet
     .getRange(lastRow, rightColumn)

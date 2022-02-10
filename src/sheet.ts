@@ -109,3 +109,19 @@ function insertColumns(
 
   return newColumnIndex;
 }
+
+function getLastRowInColumn_(
+  sheet: GoogleAppsScript.Spreadsheet.Sheet,
+  column: number
+): number {
+  let last = sheet.getLastRow();
+  const rows = sheet
+    .getRange(FIRST_ROW, column, last - FIRST_ROW + 1)
+    .getValues();
+  let next = rows.pop();
+  while (next && !next[0]) {
+    last--;
+    next = rows.pop();
+  }
+  return last;
+}
