@@ -2,8 +2,6 @@
  * Called when some cell in the spreadsheet has been changed
  */
 function onEdit(e: GoogleAppsScript.Events.SheetsOnEdit) {
-  Logger.log('edit received');
-
   const sheet = e.range.getSheet();
   const code = isCodeSheet(sheet);
   if (code) {

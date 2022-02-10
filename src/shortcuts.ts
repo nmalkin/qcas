@@ -16,13 +16,10 @@ function replaceShortcutCodes(
 
   // Check that the values we're substituting
   const value = e.value;
-  Logger.log('checking value %s', value);
   const re = /^[0-9 ]+$/;
   if (!re.test(value)) {
     return;
   }
-
-  Logger.log('looking up values');
 
   const codebook = getCodebook(question);
   const values = value.split(' ');
@@ -36,8 +33,6 @@ function replaceShortcutCodes(
     const code = codebook[index];
     return code;
   });
-
-  Logger.log('performing substitution');
 
   const newValue = codes.join(CODES_SEPARATOR);
   range.setValue(newValue);
