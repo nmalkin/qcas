@@ -138,7 +138,7 @@ function computeCohensKappa_() {
 
   // Compute summary statistics at the bottom of the new columns
   const agreementColumn = currentSheet
-    .getRange(FIRST_ROW, newColumnIndex, lastRow + 1 - FIRST_ROW, 1)
+    .getRange(FIRST_ROW, newColumnIndex + 1, lastRow + 1 - FIRST_ROW, 1)
     .getA1Notation();
   const observedAgreement =
     '=SUM(' + agreementColumn + ')/COUNT(' + agreementColumn + ')';
