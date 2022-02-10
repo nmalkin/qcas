@@ -197,7 +197,7 @@ function computeCohensKappaNonExclusive_() {
 
   summaryOutputRange.setValues([
     ['observed agreement', observedAgreement],
-    ['chance agremeent', chanceAgreementFormula],
+    ['chance agreement', chanceAgreementFormula],
     ["(fake) Cohen's kappa", irr],
   ]);
 }
