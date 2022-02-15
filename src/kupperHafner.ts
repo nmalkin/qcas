@@ -136,8 +136,8 @@ function computeKupperHafner_(inferCodebook: boolean) {
   ]);
 
   const currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const questionId = isCodeSheet(currentSheet);
-  if (questionId == null) {
+  const questionId = inferCodebook ? null : isCodeSheet(currentSheet);
+  if (!inferCodebook && questionId == null) {
     throw new QcasError(
       "couldn't determine question associated with currently opened sheet"
     );
@@ -178,7 +178,8 @@ function computeKupperHafner_(inferCodebook: boolean) {
 
   const codebookSize: string = inferCodebook
     ? `COUNTUNIQUECODES(${codeRangeA1})`
-    : getCodesAndFlags(questionId).codes.length.toString();
+    : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      getCodesAndFlags(questionId!).codes.length.toString();
   const minCountColumn = currentSheet
     .getRange(FIRST_ROW, newColumnIndex + 1, lastRow + 1 - FIRST_ROW, 1)
     .getA1Notation();

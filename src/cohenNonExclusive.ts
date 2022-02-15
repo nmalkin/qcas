@@ -130,12 +130,6 @@ function computeCohensKappaNonExclusive_() {
   }
 
   const currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const questionId = isCodeSheet(currentSheet);
-  if (questionId == null) {
-    throw new QcasError(
-      "couldn't determine question associated with currently opened sheet"
-    );
-  }
 
   // Get handles to the columns with the codes
   const leftColumn = currentSelection.getColumn();

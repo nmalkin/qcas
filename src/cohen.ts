@@ -103,12 +103,6 @@ function computeCohensKappa_() {
   }
 
   const currentSheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  const questionId = isCodeSheet(currentSheet);
-  if (questionId == null) {
-    throw new QcasError(
-      "couldn't determine question associated with currently opened sheet"
-    );
-  }
 
   // Get handles to the columns with the codes
   const leftColumn = currentSelection.getColumn();
@@ -138,7 +132,7 @@ function computeCohensKappa_() {
 
   // Compute summary statistics at the bottom of the new columns
   const agreementColumn = currentSheet
-    .getRange(FIRST_ROW, newColumnIndex+ 1, lastRow + 1 - FIRST_ROW, 1)
+    .getRange(FIRST_ROW, newColumnIndex + 1, lastRow + 1 - FIRST_ROW, 1)
     .getA1Notation();
   const observedAgreement =
     '=SUM(' + agreementColumn + ')/COUNT(' + agreementColumn + ')';
