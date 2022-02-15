@@ -20,14 +20,26 @@ function onOpen() {
     .addItem('Find conflicts', 'findConflicts')
     .addSubMenu(
       ui
-        .createMenu('Compute Kupper-Hafner agreement')
-        .addItem('Infer codebook', 'computeKupperHafnerInfer')
-        .addItem('Referencing codebook', 'computeKupperHafnerReference')
-    )
-    .addItem("Compute Cohen's kappa", 'computeCohensKappa_')
-    .addItem(
-      "Compute Cohen's kappa (multi-code)",
-      'computeCohensKappaNonExclusive_'
+        .createMenu('Compute inter-rater reliability')
+        .addSubMenu(
+          ui
+            .createMenu('One code per response')
+            .addItem("Compute Cohen's kappa", 'computeCohensKappa_')
+        )
+        .addSubMenu(
+          ui
+            .createMenu('Multiple codes per response')
+            .addSubMenu(
+              ui
+                .createMenu('Compute Kupper-Hafner agreement')
+                .addItem('Infer codebook', 'computeKupperHafnerInfer')
+                .addItem('Referencing codebook', 'computeKupperHafnerReference')
+            )
+            .addItem(
+              "Compute Cohen's kappa (multi-code)",
+              'computeCohensKappaNonExclusive_'
+            )
+        )
     )
     .addToUi();
 }
