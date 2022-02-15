@@ -1,5 +1,5 @@
 function validateCellHasOneCode_(cell: Cell): void {
-  if (cell.toString().indexOf(',') != -1) {
+  if (cell.toString().indexOf(CODES_SEPARATOR) != -1) {
     throw new QcasError(`cell has more than one code: ${cell}`);
   }
 }

@@ -174,7 +174,7 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
       return mappings[code];
     });
 
-    return renamedCodes.unique().join(',');
+    return renamedCodes.unique().join(CODES_SEPARATOR);
   };
 
   if (isRange_(input)) {
@@ -210,7 +210,7 @@ function FILTERFLAGS(input: CellOrRange): CellOrRange {
       }
     });
 
-    return filteredCodes.join(',');
+    return filteredCodes.join(CODES_SEPARATOR);
   };
 
   if (isRange_(input)) {
