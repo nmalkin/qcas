@@ -33,6 +33,13 @@ function COUNTCODE(
   codeToCount: CellRange,
   rangeToCount: CellOrRange
 ): CellRange;
+/**
+ * Count how many times the code(s) in the first argument appears in the cell(s) from the second argument
+ * 
+ * @customfunction
+ * @param codeToCount cell or range with code(s) to count
+ * @param rangeToCount cell(s) to search
+ */
 function COUNTCODE(
   codeToCount: CellOrRange,
   rangeToCount: CellOrRange
@@ -48,6 +55,7 @@ function COUNTCODE(
 
 /**
  * Create a range with all the final codes, followed by the number of times that code appeared in the specified range
+ * @customfunction
  * @param {Array<Array<string>>} input
  */
 function COUNTCODEBOOK(input: CellOrRange): CellRange {
