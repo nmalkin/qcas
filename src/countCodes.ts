@@ -35,7 +35,7 @@ function COUNTCODE(
 ): CellRange;
 /**
  * Count how many times the code(s) in the first argument appears in the cell(s) from the second argument
- * 
+ *
  * @customfunction
  * @param codeToCount cell or range with code(s) to count
  * @param rangeToCount cell(s) to search
@@ -68,6 +68,7 @@ function COUNTCODEBOOK(input: CellOrRange): CellRange {
 
   return output;
 }
+
 function allUniqueCodesInRange_(cells: CellRange): string[] {
   const allCodes = new Set<string>();
   cells.forEach((row) =>
@@ -76,6 +77,16 @@ function allUniqueCodesInRange_(cells: CellRange): string[] {
     )
   );
   return Array.from(allCodes);
+}
+
+/**
+ * Return a cell for each unique code in the given range
+ * @customfunction
+ * @param cells 
+ * @returns 
+ */
+function LISTUNIQUECODES(cells: CellRange): string[] {
+  return allUniqueCodesInRange_(cells);
 }
 
 /**
