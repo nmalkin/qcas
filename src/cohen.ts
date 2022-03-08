@@ -98,7 +98,7 @@ function computeCohensKappa_() {
     SpreadsheetApp.getActiveSpreadsheet().getActiveRange();
   // Check that the selected range is valid
   if (!validRangeForConflicts(currentSelection)) {
-    showConflictInstructions();
+    showGenericInstructions();
     return;
   }
 
