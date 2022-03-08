@@ -21,7 +21,7 @@ function isCodeSheet(sheet: GoogleAppsScript.Spreadsheet.Sheet) {
 function getSheet(sheetName: string) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
   if (sheet == null) {
-    alert("Couldn't find a sheet with the name " + sheetName);
+    showAlert("Couldn't find a sheet with the name " + sheetName);
   }
   return sheet;
 }

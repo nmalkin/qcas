@@ -11,7 +11,7 @@ function showConflictInstructions(): void {
   const message =
     'To start conflict resolution, please select ' +
     'the two columns that contain the codes to be resolved.';
-  alert(message);
+  showAlert(message);
 }
 
 /**

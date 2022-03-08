@@ -71,7 +71,7 @@ function getCodesAndFlags(question: string): CodesAndFlags {
     } else if (type === CODEBOOK_TYPE_FLAG) {
       flags.push(code);
     } else {
-      alert('Unrecognized code type ' + type + ' in codebook ' + question);
+      showAlert('Unrecognized code type ' + type + ' in codebook ' + question);
       break;
     }
   }
