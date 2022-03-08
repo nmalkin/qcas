@@ -163,12 +163,20 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
 
   const mappings = getCodeToFinalNameMapping_(questionId);
 
-  const mapCellContents = (cellContents: Cell) => {
+  const mapCellContents = (
+    cellContents: Cell,
+    rowNumber?: number,
+    columnNumber?: number
+  ) => {
     const codeList = getCodesInCell_(cellContents);
 
     const renamedCodes = codeList.map((code: string) => {
       if (!(code in mappings)) {
-        throw new QcasError(`ERROR: ${code} not found in codebook`);
+        throw new QcasError(
+          `not in codebook: ${code}` +
+            (rowNumber != undefined ? ` in row ${rowNumber + 1}` : '') +
+            (columnNumber != undefined ? `, column ${columnNumber + 1}` : '')
+        );
       }
 
       return mappings[code];
@@ -178,7 +186,11 @@ function FINALNAMES(input: CellOrRange): CellOrRange {
   };
 
   if (isRange_(input)) {
-    return input.map((row) => row.map((cell) => mapCellContents(cell)));
+    return input.map((row, rowNumber) =>
+      row.map((cell, columnNumber) =>
+        mapCellContents(cell, rowNumber, columnNumber)
+      )
+    );
   } else {
     return mapCellContents(input);
   }
@@ -197,7 +209,11 @@ function FILTERFLAGS(input: CellOrRange): CellOrRange {
   const allCodes = new Set(codesAndFlags.codes);
   const allFlags = new Set(codesAndFlags.flags);
 
-  const filterCellContents = (cellContents: Cell) => {
+  const filterCellContents = (
+    cellContents: Cell,
+    rowNumber?: number,
+    columnNumber?: number
+  ) => {
     const codeList = getCodesInCell_(cellContents);
 
     const filteredCodes = codeList.filter((code: string) => {
@@ -206,7 +222,11 @@ function FILTERFLAGS(input: CellOrRange): CellOrRange {
       } else if (allFlags.has(code)) {
         return false;
       } else {
-        throw new QcasError(`ERROR: ${code} not found in codebook`);
+        throw new QcasError(
+          `not in codebook: ${code}` +
+            (rowNumber != undefined ? ` in row ${rowNumber + 1}` : '') +
+            (columnNumber != undefined ? `, column ${columnNumber + 1}` : '')
+        );
       }
     });
 
@@ -214,7 +234,11 @@ function FILTERFLAGS(input: CellOrRange): CellOrRange {
   };
 
   if (isRange_(input)) {
-    return input.map((row) => row.map((cell) => filterCellContents(cell)));
+    return input.map((row, rowNumber) =>
+      row.map((cell, columnNumber) =>
+        filterCellContents(cell, rowNumber, columnNumber)
+      )
+    );
   } else {
     return filterCellContents(input);
   }
