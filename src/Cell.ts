@@ -15,7 +15,12 @@ function filterEmpty_(array: string[]) {
 }
 
 function getCodesInCell_(cell: Cell): string[] {
-  return filterEmpty_(cell.toString().split(CODES_SEPARATOR)).unique();
+  return filterEmpty_(
+    cell
+      .toString()
+      .split(CODES_SEPARATOR)
+      .map((str) => str.trim())
+  ).unique();
 }
 
 function cellIsDate_(cell: Cell): cell is NonDateCell {
