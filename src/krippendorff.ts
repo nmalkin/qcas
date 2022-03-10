@@ -211,7 +211,7 @@ function computeKrippendorff_() {
   ]);
 
   // Add row with pairable counts
-  const sumRangeFixed = sumRange.replace(new RegExp('([A-Z])', 'g'), '$$$1');
+  const sumRangeFixed = sumRange.replace(new RegExp('([A-Z]+)', 'g'), '$$$1');
   const firstCountRange = sheet
     .getRange(FIRST_ROW, newColumnIndex + 2, numInputRows, 1)
     .getA1Notation();
