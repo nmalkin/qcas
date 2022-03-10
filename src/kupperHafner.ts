@@ -205,8 +205,8 @@ function computeKupperHafner_(inferCodebook: boolean) {
     '=(' + piHatRange + '-' + pi0Range + ')/(1-' + pi0Range + ')';
 
   summaryOutputRange.setValues([
-    ['pi-hat', piHat],
-    ['pi0', pi_0],
+    ['observed agreement', piHat],
+    ['expected agreement', pi_0],
     ['Kupper-Hafner concordance', concordance],
   ]);
 }
