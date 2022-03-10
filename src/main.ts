@@ -30,11 +30,9 @@ function onOpen() {
         .addSubMenu(
           ui
             .createMenu('Multiple codes per response')
-            .addSubMenu(
-              ui
-                .createMenu('Compute Kupper-Hafner agreement')
-                .addItem('Infer codebook', 'computeKupperHafnerInfer')
-                .addItem('Referencing codebook', 'computeKupperHafnerReference')
+            .addItem(
+              "Compute Kupper-Hafner agreement",
+              'computeKupperHafnerInfer'
             )
             .addItem(
               "Compute Cohen's kappa (multi-code)",

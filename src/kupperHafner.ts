@@ -211,10 +211,6 @@ function computeKupperHafner_(inferCodebook: boolean) {
   ]);
 }
 
-function computeKupperHafnerReference() {
-  computeKupperHafner_(false);
-}
-
 function computeKupperHafnerInfer() {
   computeKupperHafner_(true);
 }
