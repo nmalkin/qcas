@@ -25,6 +25,7 @@ function onOpen() {
           ui
             .createMenu('One code per response')
             .addItem("Compute Cohen's kappa", 'computeCohensKappa_')
+            .addItem("Compute Krippendorff's alpha", 'computeKrippendorff_')
         )
         .addSubMenu(
           ui

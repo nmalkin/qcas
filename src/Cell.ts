@@ -35,3 +35,16 @@ function validateCells_(cells: Cell[]): NonDateCell[] {
     return cell;
   });
 }
+
+function cellAsNumberOrError_(cell: Cell): number {
+  if (isNumber(cell)) {
+    return cell;
+  }
+
+  const value = Number(cell.toString());
+  if (isNumber(value)) {
+    return value;
+  }
+
+  throw new QcasError(`expected number but got ${cell}`);
+}

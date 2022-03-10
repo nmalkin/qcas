@@ -84,7 +84,7 @@ function getColumnNumberByName(
 }
 
 /**
- * Insert 2 columns after the ones in the specified range
+ * Insert the given number of columns after the ones in the specified range
  * @param {GoogleAppsScript.Spreadsheet.Range} range
  * @param {Integer} howMany how many columns to insert
  * @param {Array} names the names to put in the first row of the new columns
@@ -104,7 +104,7 @@ function insertColumns(
 
   // Give them appropriate titles
   const newColumnIndex = position + 1;
-  const header = sheet.getRange(1, newColumnIndex, 1, howMany);
+  const header = sheet.getRange(1, newColumnIndex, 1, names.length);
   header.setValues([names]);
 
   return newColumnIndex;

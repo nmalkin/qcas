@@ -6,6 +6,7 @@ const CODEBOOK_PATTERN = /(\w+)_codebook/;
 const CODING_PATTERN = /(\w+)_codes(_\w+)?/;
 const FINAL_CODES_PATTERN = /(\w+)_codes_final/;
 
+const HEADER_ROW = 1;
 const FIRST_ROW = 2; // Assuming a header, row 2 is always the first row.
 
 const CODES_SEPARATOR = ',';
