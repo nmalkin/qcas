@@ -80,7 +80,7 @@ function COHEN_PROBABILITY_MULTIPLE(cells: CellRange): number {
     );
   }
 
-  const responseCount = cells.length;
+  var responseCount = cells.length;
   if (responseCount == 0) {
     throw new QcasError('no cells in range'); // this shouldn't even be possible
   }
@@ -92,6 +92,11 @@ function COHEN_PROBABILITY_MULTIPLE(cells: CellRange): number {
       throw new QcasError(
         `expecting two cells in each input row, but found ${row.length} in row ${i}`
       );
+    }
+
+    if (cellsAreEmpty_(row)) {
+      responseCount--;
+      return;
     }
 
     const [cellA, cellB] = row;

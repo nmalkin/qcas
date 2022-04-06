@@ -36,6 +36,10 @@ function CODESAGREE2(cells: CellRange): CellRange {
       );
     }
 
+    if (cellsAreEmpty_(row)) {
+      return [''];
+    }
+
     const [cellA, cellB] = row;
 
     return [twoCodesAgree_(cellA, cellB)];
@@ -55,7 +59,7 @@ function COHEN_PROBABILITY(cells: CellRange): number {
     );
   }
 
-  const responseCount = cells.length;
+  var responseCount = cells.length;
   if (responseCount == 0) {
     throw new QcasError('no cells in range'); // this shouldn't even be possible
   }
@@ -67,6 +71,11 @@ function COHEN_PROBABILITY(cells: CellRange): number {
       throw new QcasError(
         `expecting two cells in each input row, but found ${row.length} in row ${i}`
       );
+    }
+
+    if (cellsAreEmpty_(row)) {
+      responseCount--;
+      return;
     }
 
     let [codeA, codeB] = row;

@@ -8,10 +8,23 @@ function isRange_(input: CellOrRange): input is CellRange {
   return Array.isArray(input);
 }
 
+function cellIsEmpty_(cell: Cell): boolean {
+  return cell == '';
+}
+
 function filterEmpty_(array: string[]) {
   return array.filter(function (value) {
-    return value != '';
+    return !cellIsEmpty_(value);
   });
+}
+
+/**
+ * Return true if all given cells are empty
+ * @param cells
+ * @returns
+ */
+function cellsAreEmpty_(cells: Cell[]): boolean {
+  return cells.reduce<boolean>((acc, cell) => acc && cellIsEmpty_(cell), true);
 }
 
 function getCodesInCell_(cell: Cell): string[] {

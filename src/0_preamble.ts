@@ -1,5 +1,5 @@
 /*
-QCAS v0.2.0-20220310
+QCAS v0.2.0-20220406
 https://github.com/nmalkin/qcas
 
 Copyright (C) 2022 N. Malkin
