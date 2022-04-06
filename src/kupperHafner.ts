@@ -72,10 +72,10 @@ function CONCORDANCE(
 }
 
 /**
- * 
- * @param cells 
- * @param questionId 
- * @returns 
+ *
+ * @param cells
+ * @param questionId
+ * @returns
  * @customfunction
  */
 function MINCOUNT(

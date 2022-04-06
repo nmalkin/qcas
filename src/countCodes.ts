@@ -82,8 +82,8 @@ function allUniqueCodesInRange_(cells: CellRange): string[] {
 /**
  * Return a cell for each unique code in the given range
  * @customfunction
- * @param cells 
- * @returns 
+ * @param cells
+ * @returns
  */
 function LISTUNIQUECODES(cells: CellRange): string[] {
   return allUniqueCodesInRange_(cells);
