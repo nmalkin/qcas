@@ -3,6 +3,7 @@
  * @param cells
  * @param questionId the question id, used to look up the codebook. Codes listed as "flag"s in that codebook will not be included in calculation. If omitted, the codebook will be inferred from the contents of the range (i.e., only codes that appear in it will be used in the counts), but the function will be unable to distinguish between codes and flags.
  * @returns
+ * @customfunction
  */
 function CONCORDANCE(
   cells: CellRange,
@@ -70,6 +71,13 @@ function CONCORDANCE(
   });
 }
 
+/**
+ * 
+ * @param cells 
+ * @param questionId 
+ * @returns 
+ * @customfunction
+ */
 function MINCOUNT(
   cells: CellRange,
   questionId?: string

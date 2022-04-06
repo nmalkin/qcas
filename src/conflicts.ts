@@ -103,6 +103,13 @@ function cellDifferences(leftCell: string, rightCell: string) {
   return diff;
 }
 
+/**
+ * 
+ * @param cellA 
+ * @param cellB 
+ * @returns 
+ * @customfunction
+ */
 function CODES_AGREE(cellA: string, cellB: string) {
   // Check if any (real) differences remain
   const diff = cellDifferences(cellA, cellB);

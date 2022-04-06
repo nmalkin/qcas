@@ -20,6 +20,7 @@ function twoCodesAgree_(cellA: Cell, cellB: Cell): number {
  * Returns agreement between the pairs of codes in the given range
  * @returns 1 if both cells have the same code, 0 if they don't
  * @throws if either cell has more than one code
+ * @customfunction
  */
 function CODESAGREE2(cells: CellRange): CellRange {
   if (!isRange_(cells)) {
@@ -45,6 +46,7 @@ function CODESAGREE2(cells: CellRange): CellRange {
  * Compute estimated probability of chance agreement, using Cohen's method
  * @param cells
  * @returns
+ * @customfunction
  */
 function COHEN_PROBABILITY(cells: CellRange): number {
   if (!isRange_(cells)) {

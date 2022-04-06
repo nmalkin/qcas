@@ -16,6 +16,7 @@ function commonCodeCount_(cellA: Cell, cellB: Cell): number {
  * Return how many of the codes in the paired cells agree
  * @returns count of how many codes in each cell agree
  * @throws if either cell has more than one code
+ * @customfunction
  */
 function CODESAGREECOUNT(cells: CellRange): CellRange {
   if (!isRange_(cells)) {
@@ -50,6 +51,7 @@ function maxCodeCount_(cellA: Cell, cellB: Cell): number {
  * Count the maximum number of codes used by either of the coders
  * @param cells
  * @returns
+ * @customfunction
  */
 function MAXCOUNT(cells: CellRange): Array<Array<Cell | null>> {
   return cells.map((row: Cell[], i: number) => {
@@ -69,6 +71,7 @@ function MAXCOUNT(cells: CellRange): Array<Array<Cell | null>> {
  * Compute estimated probability of chance agreement, using Cohen's method
  * @param cells
  * @returns
+ * @customfunction
  */
 function COHEN_PROBABILITY_MULTIPLE(cells: CellRange): number {
   if (!isRange_(cells)) {
