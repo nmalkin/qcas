@@ -22,7 +22,7 @@ function showConflictInstructions(): void {
 function insertConflictColumns(
   range: GoogleAppsScript.Spreadsheet.Range
 ): number {
-  return insertColumns(range, 2, ['final', 'status']);
+  return insertColumns(range, 1, ['final']);
 }
 
 interface CodeDiff {
@@ -165,19 +165,13 @@ function findConflicts() {
       rightCellValue.toString()
     );
     const diffStr = formatDiff(diff);
-    const agreementCommand =
-      '=CODES_AGREE(' +
-      leftCell.getA1Notation() +
-      ',' +
-      rightCell.getA1Notation() +
-      ')';
 
     // Write the results
-    const outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 2);
-    outputRange.setValues([[diffStr, agreementCommand]]);
+    const outputRange = currentSheet.getRange(currentRow, newColumnIndex, 1, 1);
+    outputRange.setValues([[diffStr]]);
 
     if (CODES_AGREE(leftCellValue, rightCellValue) == 'conflict') {
-      outputRange.setBackgrounds([['yellow', 'white']]);
+      outputRange.setBackgrounds([['yellow']]);
     }
 
     currentRow++;
