@@ -37,7 +37,7 @@ Note:
 
 Next, you need to add the scripts. This is manual and somewhat cumbersome (sorry).
 
-In your spreadsheet, go to Tools > Script Editor. Create new script files (File > New > Script file) for each of the .js files in the root of this repo (ignoring any that start with a period).
+In your spreadsheet, go to Extensions > Apps Script. Create new script files (by clicking the big + button under 'Files') for each of the .js files in the root of this repo (ignoring any that start with a period).
 (Actually, you should be able to merge all the code into a single .js file.)
 
 Close the script editor and refresh the spreadsheet. You should see a screen asking for permission for your scripts to run.
