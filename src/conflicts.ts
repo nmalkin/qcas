@@ -81,10 +81,16 @@ function formatDiff(diff: CodeDiff): string {
     str += diff.both.join(CODES_SEPARATOR);
   }
   if (diff.onlyA.length > 0) {
-    str += '\n<' + diff.onlyA.join(CODES_SEPARATOR);
+    if (str.length > 0) {
+      str += '\n';
+    }
+    str += '<' + diff.onlyA.join(CODES_SEPARATOR);
   }
   if (diff.onlyB.length > 0) {
-    str += '\n>' + diff.onlyB.join(CODES_SEPARATOR);
+    if (str.length > 0) {
+      str += '\n';
+    }
+    str += '>' + diff.onlyB.join(CODES_SEPARATOR);
   }
   return str;
 }
@@ -102,10 +108,10 @@ function cellDifferences(leftCell: string, rightCell: string) {
 }
 
 /**
- * 
- * @param cellA 
- * @param cellB 
- * @returns 
+ *
+ * @param cellA
+ * @param cellB
+ * @returns
  * @customfunction
  */
 function CODES_AGREE(cellA: Cell, cellB: Cell) {
@@ -154,7 +160,10 @@ function findConflicts() {
     // TODO: the profiler says the getValue call is expensive. Replace it with
     // getValues outside the loop.
 
-    const diff = cellDifferences(leftCellValue.toString(), rightCellValue.toString());
+    const diff = cellDifferences(
+      leftCellValue.toString(),
+      rightCellValue.toString()
+    );
     const diffStr = formatDiff(diff);
     const agreementCommand =
       '=CODES_AGREE(' +
