@@ -96,9 +96,7 @@ function cellDifferences(leftCell: string, rightCell: string) {
 
   // Find commonalities and differences
   const question = isCodeSheet(SpreadsheetApp.getActiveSheet());
-  if (question == null)
-    throw new QcasError("current sheet isn't recognized as a coding sheet");
-  const flags = getCodebook(question, true);
+  const flags = question == null ? [] : getCodebook(question, true);
   const diff = computeDiff(leftValues, rightValues, flags);
   return diff;
 }
