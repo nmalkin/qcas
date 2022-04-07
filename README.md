@@ -21,26 +21,83 @@ This project is a set of [Google Apps Scripts](https://developers.google.com/app
 
 **Calculate [inter-rater reliability](https://en.wikipedia.org/wiki/Inter-rater_reliability)** using [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen's_kappa), [Krippendorff's alpha](https://en.wikipedia.org/wiki/Krippendorff's_alpha), or the [Kupper & Hafner metric](https://github.com/nmalkin/kupper_hafner).
 
+**Group labels into categories** and filter out labels that you decide not to use for calculating agreement.
 
-## Usage
 
-Setting up QCAS requires a few steps.
+## Installation
 
-First, the spreadsheet needs to set up in a specific way.
-[Here is a template](https://docs.google.com/spreadsheets/d/1EfjeXCM1tmDtuazxIvYET2FKieVNgM2jkuYws83mWq4) with additional explanatory comments.
+Here are the steps to get started using QCAS:
 
-Note:
+1. Download and unzip the latest package [from the releases](https://github.com/nmalkin/qcas/releases)
+2. In the spreadsheet where you want to use QCAS, click on _Extensions_ in the menu bar and select _Apps Script_. This will open a new window with the Apps Script Project Editor.
+3. Copy over `Code.gs` from the release files
+    - In the left pane, click the big + next to _Files_, and select _Script_
+    - Give the file a name (e.g., `Code`) 
+    - Copy and paste the contents of `Code.gs` into it.
+4. Copy over `sidebar.html` from the release files
+    - In the left pane, click the big + next to _Files_, and select _HTML_
+    - Name the file `sidebar`)
+    - Copy and paste the contents of `sidebar.html` into it.
+5. Go back to the tab with your spreadsheet and refresh the page
+6. The first time you do this, you should see a screen asking you to authorize the app you just created
+    - Despite what the prompt says, the scripts will (and can) only access the current spreadsheet.
+
+After you've done this, you'll see a _Coding Assistant_ menu in your menubar, to the right of the _Help_ menu.
+
+
+## Setup
+
+QCAS expects your spreadsheet to be organized a certain way.
+
+### To resolve conflicts or calculate IRR
+
+- Codes should be entered in two (or more) **adjacent** columns
+- One row per response
+- Codes should start on **row 2**. (The first row is reserved for the header.)
+- If a rater assigned multiple codes to the same response, they should be in one cell, separated by commas (e.g., `code_a,code_b`)
+
+### To take advantage of automatic renaming and categorization
+
+This is a bit more complicated, because you need to set up two sheets: one for the codes (here, all of the above rules still apply) and one for the codebook.
 
 - There needs to be a separate sheet for the codebook, named *question-name_codebook* with Code and Type column headers.
 - The responses will be in a separate sheet, named *question-name_codes_coder-name* with a Coder column heading.
 - If you're flagging conflicts or calculating IRR, the codes need to be pasted into a new sheet, named *question-name_codes_final*.
 
-Next, you need to add the scripts. This is manual and somewhat cumbersome (sorry).
+[Here is a template](https://docs.google.com/spreadsheets/d/1EfjeXCM1tmDtuazxIvYET2FKieVNgM2jkuYws83mWq4) with additional explanatory comments.
 
-In your spreadsheet, go to Extensions > Apps Script. Create new script files (by clicking the big + button under 'Files') for each of the .js files in the root of this repo (ignoring any that start with a period).
-(Actually, you should be able to merge all the code into a single .js file.)
 
-Close the script editor and refresh the spreadsheet. You should see a screen asking for permission for your scripts to run.
+## Usage
 
-Once the scripts are working, you'll see a Coding Assistant menu in your menubar, to the right of the Help menu.
+### Calculating IRR
+
+1. Select the columns with the codes for which IRR needs to be calculated
+2. Go to _Coding Assistant_ > _Computer inter-rater reliability_ and select the appropriate metric
+
+### Showing differences between two rater's codes
+
+1. Select the columns with the codes for which differences need to be resolved
+2. Go to _Coding Assistant_ > _Find conflicts_
+
+### Type numbers instead of codes
+
+1. Make sure you've set up the different sheets according to the instructions above
+2. Make sure your codebook sheet has the codes you will be using
+3. Go to _Coding Assistant_ > _Show codebook_. This will show you the numbers that will be substituted for each code.
+4. For a given field, type the number of the code you want to enter. After you press _Enter_, it should be replaced with the code.
+5. If you want to enter multiple codes, you can type numbers separated by spaces, e.g., `1 2` -> `code_a,code_b`
+
+### Code renaming/grouping/categorization
+
+1. Make sure you've set up the different sheets according to the instructions above
+2. Make sure your codebook sheet has the codes you will be using and contains the `Code - final` column
+3. To filter out optional codes ("flags"), enter the formula `=FILTERFLAGS(RANGE)`, where RANGE is the range where the codes you want to filter are located in A1 notation (e.g., `A1:B100`)
+4. To replace codes with their new names, enter the formula `=FINALNAMES(RANGE)`, where RANGE is the range where the codes you want to rename are located in A1 notation (e.g., `A1:B100`)
+
+
+## Building
+
+This project is written in TypeScript and compiled into JavaScript before it's run. You can get the pre-compiled JS from the releases, but if you want to do it yourself:
+
+    npm build
 
