@@ -31,7 +31,7 @@ function onOpen() {
           ui
             .createMenu('Multiple codes per response')
             .addItem(
-              "Compute Kupper-Hafner agreement",
+              'Compute Kupper-Hafner agreement',
               'computeKupperHafnerInfer'
             )
             .addItem(
@@ -40,5 +40,6 @@ function onOpen() {
             )
         )
     )
+    .addItem('About', 'showAbout_')
     .addToUi();
 }

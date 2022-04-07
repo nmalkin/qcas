@@ -1,5 +1,5 @@
 /*
-QCAS v0.2.0-20220406
+QCAS
 https://github.com/nmalkin/qcas
 
 Copyright (C) 2022 N. Malkin
@@ -17,3 +17,4 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+const VERSION = 'v0.2.0-20220406';
