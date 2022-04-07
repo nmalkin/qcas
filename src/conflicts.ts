@@ -110,9 +110,9 @@ function cellDifferences(leftCell: string, rightCell: string) {
  * @returns 
  * @customfunction
  */
-function CODES_AGREE(cellA: string, cellB: string) {
+function CODES_AGREE(cellA: Cell, cellB: Cell) {
   // Check if any (real) differences remain
-  const diff = cellDifferences(cellA, cellB);
+  const diff = cellDifferences(cellA.toString(), cellB.toString());
   let status;
   const difference = diff.onlyA.concat(diff.onlyB);
   if (difference.length == 0) {
@@ -151,12 +151,12 @@ function findConflicts() {
     const leftCell = currentSheet.getRange(currentRow, leftColumn);
     const rightCell = currentSheet.getRange(currentRow, rightColumn);
 
-    const leftCellValue = leftCell.getValue();
-    const rightCellValue = rightCell.getValue();
+    const leftCellValue: Cell = leftCell.getValue();
+    const rightCellValue: Cell = rightCell.getValue();
     // TODO: the profiler says the getValue call is expensive. Replace it with
     // getValues outside the loop.
 
-    const diff = cellDifferences(leftCellValue, rightCellValue);
+    const diff = cellDifferences(leftCellValue.toString(), rightCellValue.toString());
     const diffStr = formatDiff(diff);
     const agreementCommand =
       '=CODES_AGREE(' +
