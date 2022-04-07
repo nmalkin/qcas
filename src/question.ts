@@ -17,6 +17,6 @@ function getCurrentQuestionCodeOrError_(): string {
 
   // Otherwise, I really have no idea what sheet this is.
   throw new QcasError(
-    `can't figure out which question sheet ${sheet.getName()} is associated with`
+    `can't figure out which question sheet '${sheet.getName()}' is associated with`
   );
 }
