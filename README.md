@@ -19,7 +19,7 @@ This project is a set of [Google Apps Scripts](https://developers.google.com/app
 
 **Automatically flag conflicting labels.** When two coders are labeling responses, conflicts naturally arise. These scripts will create a new column highlighting fields where a conflict occurred, and what exactly that conflict is.
 
-**Calculate [inter-rater reliability](https://en.wikipedia.org/wiki/Inter-rater_reliability)** using the [Kupper & Hafner metric](https://github.com/nmalkin/kupper_hafner).
+**Calculate [inter-rater reliability](https://en.wikipedia.org/wiki/Inter-rater_reliability)** using [Cohen's kappa](https://en.wikipedia.org/wiki/Cohen's_kappa), [Krippendorff's alpha](https://en.wikipedia.org/wiki/Krippendorff's_alpha), or the [Kupper & Hafner metric](https://github.com/nmalkin/kupper_hafner).
 
 
 ## Usage
