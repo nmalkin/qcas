@@ -22,7 +22,7 @@ function showConflictInstructions(): void {
 function insertConflictColumns(
   range: GoogleAppsScript.Spreadsheet.Range
 ): number {
-  return insertColumns(range, 1, ['final']);
+  return insertColumns(range, 1, ['final'], false);
 }
 
 interface CodeDiff {

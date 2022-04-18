@@ -88,12 +88,14 @@ function getColumnNumberByName(
  * @param {GoogleAppsScript.Spreadsheet.Range} range
  * @param {Integer} howMany how many columns to insert
  * @param {Array} names the names to put in the first row of the new columns
+ * @param {boolean} clearDataValidations When inserting new columns, if the preceding column has data validations, they get copied to the new cells. Setting this argument to true prevents this behavior.
  * @return {Integer} the index of the first newly created column
  */
 function insertColumns(
   range: GoogleAppsScript.Spreadsheet.Range,
   howMany: number,
-  names: string[]
+  names: string[],
+  clearDataValidations = true
 ): number {
   // Figure out where to put the columns
   const position = range.getLastColumn();
@@ -106,6 +108,13 @@ function insertColumns(
   const newColumnIndex = position + 1;
   const header = sheet.getRange(1, newColumnIndex, 1, names.length);
   header.setValues([names]);
+
+  // If the previous column had data validations, it gets copied to the new cells. Remove it.
+  if (clearDataValidations) {
+    sheet
+      .getRange(1, newColumnIndex, sheet.getMaxRows(), howMany)
+      .clearDataValidations();
+  }
 
   return newColumnIndex;
 }
