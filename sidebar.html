@@ -4,12 +4,18 @@
 <head>
   <base target="_top">
   <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+  <style>
+    .code-table td {
+      border-left: 1px solid #ebebeb;
+      padding: 5px 5px;
+    }
+  </style>
 </head>
 
 <body>
   <? var question = getCurrentQuestionCodeOrError_(); ?>
   <? var codes = getCodebook(question); ?>
-    <table>
+    <table class="code-table">
       <? for (var i = 0; i < codes.length; i++) { ?>
         <tr>
           <td>
