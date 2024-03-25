@@ -36,13 +36,15 @@ Here are the steps to get started using QCAS:
     - Copy and paste the contents of `Code.gs` into it.
 4. Copy over `sidebar.html` from the release files
     - In the left pane, click the big + next to _Files_, and select _HTML_
-    - Name the file `sidebar`)
+    - Name the file `sidebar`
     - Copy and paste the contents of `sidebar.html` into it.
-5. Go back to the tab with your spreadsheet and refresh the page
-6. The first time you do this, you should see a screen asking you to authorize the app you just created
+5. Though it seems intuitive, you do _not_ need to press the big blue "Deploy" button. Instead, move on to Step #6
+6. Go back to the tab with your spreadsheet and refresh the page
+7. After you've done this, you should see a _Coding Assistant_ menu in your menubar, to the right of the _Help_ menu.
+    Select any of the menu items in that menu
+8. The first time you do this, you should see a screen asking you to authorize the app you just created.
     - Despite what the prompt says, the scripts will (and can) only access the current spreadsheet.
 
-After you've done this, you'll see a _Coding Assistant_ menu in your menubar, to the right of the _Help_ menu.
 
 
 ## Setup
