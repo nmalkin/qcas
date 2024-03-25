@@ -87,7 +87,7 @@ For more advanced codebook operations (e.g., grouping minor codes into major one
 1. Select the columns with the codes for which IRR needs to be calculated
 2. Go to _Coding Assistant_ > _Computer inter-rater reliability_ and select the appropriate metric
 
-### Showing differences between two rater's codes
+### Showing differences between two raters' codes
 
 1. Select the columns with the codes for which differences need to be resolved
 2. Go to _Coding Assistant_ > _Find conflicts_
