@@ -71,6 +71,17 @@ This is a bit more complicated, because you need to set up two sheets: one for t
 
 ## Usage
 
+### Coding
+
+To slightly speed up the process of coding, you can take advantage of QCAS's automatic code expansion.
+
+1. Make sure you've set up both the coding and codebook sheets according to the instructions above
+2. Select "Show codebook" from the "Coding Assistant" menu. This will open up the sidebar displaying all the codes in your codebook, with a number before each one.
+3. In any cell of your coding sheet, type a number and hit Enter. It will be replaced by the associated code from your codebook.
+4. To get multiple codes, type the numbers separated by spaces (e.g., `1 2 3`). After replacement, the codes will be separated by commas
+
+For more advanced codebook operations (e.g., grouping minor codes into major ones), see further down.
+
 ### Calculating IRR
 
 1. Select the columns with the codes for which IRR needs to be calculated
