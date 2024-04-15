@@ -83,21 +83,12 @@ function getCodesAndFlags(question: string): CodesAndFlags {
 }
 
 /**
- * Return an array of all codes in the codebook
- *
- * @deprecated
+ * Return an array of all flags in the codebook
  *
  * @param question the name of the question, used in the sheet title
- * @param {boolean} flagsOnly if true, only return the flags
  */
-function getCodebook(question: string, flagsOnly?: boolean): string[] {
-  const codesAndFlags = getCodesAndFlags(question);
-
-  if (flagsOnly) {
-    return codesAndFlags.flags;
-  } else {
-    return codesAndFlags.codes.concat(codesAndFlags.flags);
-  }
+function getFlags(question: string): string[] {
+  return getCodesAndFlags(question).flags;
 }
 
 /**

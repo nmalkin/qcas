@@ -102,7 +102,7 @@ function cellDifferences(leftCell: string, rightCell: string) {
 
   // Find commonalities and differences
   const question = isCodeSheet(SpreadsheetApp.getActiveSheet());
-  const flags = question == null ? [] : getCodebook(question, true);
+  const flags = question == null ? [] : getFlags(question);
   const diff = computeDiff(leftValues, rightValues, flags);
   return diff;
 }
