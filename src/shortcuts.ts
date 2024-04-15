@@ -6,7 +6,7 @@
  */
 function replaceShortcutCodes(
   question: string,
-  e: GoogleAppsScript.Events.SheetsOnEdit
+  e: GoogleAppsScript.Events.SheetsOnEdit,
 ) {
   // Check that we're dealing with only 1 cell
   const range = e.range;
@@ -24,7 +24,11 @@ function replaceShortcutCodes(
   const codebook = getCodebook(question);
   const values = value.split(' ');
   const codes = values.map(function (value) {
-    const index = parseInt(value) - 2;
+    var index = parseInt(value) - 2;
+
+    if (index < 0) {
+      index = codebook.length + index;
+    }
 
     if (index < 0 || index >= codebook.length) {
       return '?';
