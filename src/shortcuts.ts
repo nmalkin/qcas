@@ -14,7 +14,7 @@ function replaceShortcutCodes(
     return;
   }
 
-  // Check that the values we're substituting
+  // Check that the values we're substituting are only numbers
   const value = e.value;
   const re = /^[0-9 ]+$/;
   if (!re.test(value)) {
@@ -24,7 +24,7 @@ function replaceShortcutCodes(
   const codebook = getCodebook(question);
   const values = value.split(' ');
   const codes = values.map(function (value) {
-    const index = parseInt(value) - 1;
+    const index = parseInt(value) - 2;
 
     if (index < 0 || index >= codebook.length) {
       return '?';
