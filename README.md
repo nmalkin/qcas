@@ -63,6 +63,7 @@ QCAS expects your spreadsheet to be organized a certain way.
 This is a bit more complicated, because you need to set up two sheets: one for the codes (here, all of the above rules still apply) and one for the codebook.
 
 - There needs to be a separate sheet for the codebook, named *question-name_codebook* with Code and Type column headers.
+    - If you have only one codebook in the entire spreadsheet, you can name it `codebook` (without any prefix).
 - The responses will be in a separate sheet, named *question-name_codes_coder-name* with a Coder column heading.
 - If you're flagging conflicts or calculating IRR, the codes need to be pasted into a new sheet, named *question-name_codes_final*.
 

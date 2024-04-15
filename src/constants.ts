@@ -13,3 +13,4 @@ const CODES_SEPARATOR = ',';
 
 const CODEBOOK_HEADER_FINAL = 'Code - final';
 const CODEBOOK_SHEET_NAME = (questionId: string) => questionId + '_codebook';
+const CODEBOOK_SHEET_DEFAULT_NAME = 'codebook';

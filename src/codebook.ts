@@ -1,27 +1,27 @@
 /**
- * Return sheet with given name
- * @throws if no sheet with given name is found
- */
-function getSheetOrError_(
-  sheetName: string
-): GoogleAppsScript.Spreadsheet.Sheet {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetName);
-  if (sheet == null) {
-    throw new QcasError("Couldn't find a sheet with the name " + sheetName);
-  }
-  return sheet;
-}
-
-/**
  * Return codebook sheet for the given question
  * @param questionId
- * @returns
+ * @throws if no sheet with given name is found
+ * @returns the sheet object
  */
 function getCodebookSheet_(
-  questionId: string
+  questionId: string,
 ): GoogleAppsScript.Spreadsheet.Sheet {
   const codebookSheetName = CODEBOOK_SHEET_NAME(questionId);
-  const sheet = getSheetOrError_(codebookSheetName);
+  var sheet =
+    SpreadsheetApp.getActiveSpreadsheet().getSheetByName(codebookSheetName);
+
+  if (sheet == null) {
+    sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(
+      CODEBOOK_SHEET_DEFAULT_NAME,
+    );
+  }
+
+  if (sheet == null) {
+    throw new QcasError(
+      `Couldn't find codebook sheet. It must be named ${CODEBOOK_SHEET_DEFAULT_NAME} or ${codebookSheetName} (or following a similar pattern based on the code sheet's name)`,
+    );
+  }
   return sheet;
 }
 
