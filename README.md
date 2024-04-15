@@ -66,6 +66,7 @@ This is a bit more complicated, because you need to set up two sheets: one for t
     - If you have only one codebook in the entire spreadsheet, you can name it `codebook` (without any prefix).
 - The responses will be in a separate sheet, named *question-name_codes_coder-name* with a Coder column heading.
 - If you're flagging conflicts or calculating IRR, the codes need to be pasted into a new sheet, named *question-name_codes_final*.
+    - The calculations will still work if you forget to use the `_final` suffix, but the cells' background color (which is used to highlight conflicts) won't be automatically updated unless this naming scheme is followed.
 
 [Here is a template](https://docs.google.com/spreadsheets/d/1EfjeXCM1tmDtuazxIvYET2FKieVNgM2jkuYws83mWq4) with additional explanatory comments.
 
