@@ -14,7 +14,7 @@
 
 <body>
   <? var question = getCurrentQuestionCodeOrError_(); ?>
-  <? var codes = getCodebook(question); ?>
+  <? var codes = getCompleteOrderedCodebook(question); ?>
     <table class="code-table">
       <? for (var i = 0; i < codes.length; i++) { ?>
         <tr>

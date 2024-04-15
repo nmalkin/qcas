@@ -21,7 +21,7 @@ function replaceShortcutCodes(
     return;
   }
 
-  const codebook = getCodebook(question);
+  const codebook = getCompleteOrderedCodebook(question);
   const values = value.split(' ');
   const codes = values.map(function (value) {
     var index = parseInt(value) - 2;

@@ -85,6 +85,8 @@ function getCodesAndFlags(question: string): CodesAndFlags {
 /**
  * Return an array of all codes in the codebook
  *
+ * @deprecated
+ *
  * @param question the name of the question, used in the sheet title
  * @param {boolean} flagsOnly if true, only return the flags
  */
@@ -96,6 +98,57 @@ function getCodebook(question: string, flagsOnly?: boolean): string[] {
   } else {
     return codesAndFlags.codes.concat(codesAndFlags.flags);
   }
+}
+
+/**
+ * Return an array of all codes and flags in the codebook
+ *
+ * TODO: this code largely duplicates getCodesAndFlags and can be refactored
+ * @see getCodesAndFlags
+ *
+ * @param question the name of the question, used in the sheet title
+ */
+function getCompleteOrderedCodebook(question: string): string[] {
+  const sheet = getCodebookSheet_(question);
+
+  // Find the range where the relevant codebook columns are located
+  const codeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_CODE);
+  const typeColumn = getColumnNumberByName(sheet, CODEBOOK_HEADER_TYPE);
+  const firstColumn = Math.min(codeColumn, typeColumn);
+  const lastColumn = Math.max(codeColumn, typeColumn);
+  const range = sheet.getRange(
+    FIRST_ROW,
+    firstColumn,
+    sheet.getLastRow() - 1,
+    lastColumn - firstColumn + 1,
+  );
+
+  const values = range.getValues();
+  const codebook = [];
+  for (let i = 0; i < range.getHeight(); i++) {
+    const code = values[i][codeColumn - firstColumn];
+    if (code === '') {
+      // Tolerate holes in codebook
+      codebook.push('');
+    }
+
+    let type = values[i][typeColumn - firstColumn];
+    if (type === '') {
+      // If no type is specified, assume it's a code
+      type = CODEBOOK_TYPE_CODE;
+    }
+
+    if (type === CODEBOOK_TYPE_CODE) {
+      codebook.push(code);
+    } else if (type === CODEBOOK_TYPE_FLAG) {
+      codebook.push(code);
+    } else {
+      showAlert('Unrecognized code type ' + type + ' in codebook ' + question);
+      break;
+    }
+  }
+
+  return codebook;
 }
 
 /**
